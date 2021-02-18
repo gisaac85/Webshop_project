@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace Core.Entities.Order
+namespace Core.Entities.OrderModels
 {
-    public class Order : BaseClass
+    public class Order : ModelBase
     {
         public Order()
         {

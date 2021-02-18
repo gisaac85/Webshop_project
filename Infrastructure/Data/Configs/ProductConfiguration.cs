@@ -1,8 +1,8 @@
-using Core.Entities;
+using Core.Entities.ProductModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Data.Config
+namespace Infrastructure.Data.Configs
 {
     public class ProductConfiguration : IEntityTypeConfiguration<Product>
     {

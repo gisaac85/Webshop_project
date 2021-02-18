@@ -1,8 +1,8 @@
-using Core.Entities.Order;
+using Core.Entities.OrderModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Data.Config
+namespace Infrastructure.Data.Configs
 {
     public class DeliveryMethodConiguration : IEntityTypeConfiguration<DeliveryMethod>
     {

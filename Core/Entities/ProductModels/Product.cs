@@ -1,6 +1,6 @@
-namespace Core.Entities
+namespace Core.Entities.ProductModels
 {
-    public class Product : BaseClass
+    public class Product : ModelBase
     {
         public string Name { get; set; }
         public string Description { get; set; }

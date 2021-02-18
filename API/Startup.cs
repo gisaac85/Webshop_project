@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Infrastructure.Data;
 using System;
 using Core.Interfaces;
+using Infrastructure.Data.Repositories;
 
 namespace API
 {
@@ -23,8 +24,7 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IProductRepository, ProductRepository>();
-            services.AddTransient(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
+            services.AddTransient<IProductRepository, ProductRepository>();          
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -41,10 +41,10 @@ namespace API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
-                
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));                
             }
             app.UseHsts();
+
             app.UseHttpsRedirection();
 
             app.UseRouting();

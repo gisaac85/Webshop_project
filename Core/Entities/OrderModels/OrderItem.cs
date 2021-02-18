@@ -1,6 +1,6 @@
-namespace Core.Entities.Order
+namespace Core.Entities.OrderModels
 {
-    public class OrderItem : BaseClass
+    public class OrderItem : ModelBase
     {
         public OrderItem()
         {
