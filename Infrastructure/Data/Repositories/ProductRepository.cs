@@ -33,5 +33,28 @@ namespace Infrastructure.Data.Repositories
         {
             return await _context.ProductTypes.ToListAsync();
         }
+
+        #region Add Product Methods
+        public async Task<Product> AddProductAsync(Product product)
+        {
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
+
+            return product;
+        }
+
+        #endregion
+
+
+        #region Edit Product Methods
+        public async Task<Product> EditProductAsync(Product product)
+        {
+            _context.Entry(product).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return product;
+        }
+        #endregion
+
+
     }
 }
