@@ -14,5 +14,6 @@ namespace Core.Interfaces
         Task<Product> AddProductAsync(Product product);
 
         Task<Product> EditProductAsync(Product product);
+
     }
 }

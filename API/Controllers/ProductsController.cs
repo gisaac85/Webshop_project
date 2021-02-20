@@ -52,5 +52,27 @@ namespace API.Controllers
             return await _productsRepo.GetProductTypesAsync();
         }
 
+        [HttpPost]
+        [Route("addproduct")]
+        public async Task<ActionResult<Product>> AddProduct(Product product)
+        {
+            await _productsRepo.AddProductAsync(product);
+            return Ok(product);
+        }
+
+        [HttpPut]
+        [Route("editproduct/{id}")]
+        public async Task<ActionResult<Product>> EditProduct(int id, Product product)
+        {
+            if (id != product.Id)
+            {
+                return BadRequest();
+            }
+
+            await _productsRepo.EditProductAsync(product);
+
+            return Ok(product);
+        }
+
     }
 }
