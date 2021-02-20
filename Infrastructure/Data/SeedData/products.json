@@ -1,11 +1,35 @@
 [
-
   {
-    "Name": "Addidas Sport FY0377",
+    "Name": "Sport-FY0377",
     "Description": "New sport shoes from Addidas",
     "Price": 120,
     "PictureUrl": "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/429a510e09fe4039ba33ac770135d8be_9366/Ultraboost_21_Schoenen_Wit_FY0377_01_standard.jpg",
     "ProductTypeId": 1,
     "ProductBrandId": 2
+  },
+  {
+    "Name": "Sport-DB0156",
+    "Description": "New sport shoes from Addidas",
+    "Price": 150,
+    "PictureUrl": "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/8e8eb6ba3e6d4ab48362a82e01272749_9366/Daily_2.0_Schoenen_Grijs_DB0156_01_standard.jpg",
+    "ProductTypeId": 1,
+    "ProductBrandId": 2
+  },
+  {
+    "Name": "SOFT TRAINERS",
+    "Description": "Zara trainers",
+    "Price": 90,
+    "PictureUrl": "https://static.zara.net/photos///2021/V/1/1/p/2438/710/090/2/w/1900/2438710090_6_1_1.jpg?ts=1613552128733",
+    "ProductTypeId": 1,
+    "ProductBrandId": 1
+  },
+  {
+    "Name": "Sneakers",
+    "Description": "Mesh Sneakers",
+    "Price": 50,
+    "PictureUrl": "https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2F14%2F92%2F14923b1fc8d956da058e0dee0c6fcb30aa775efc.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BDESCRIPTIVESTILLLIFE%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/main]",
+    "ProductTypeId": 1,
+    "ProductBrandId": 4
   }
+
 ]

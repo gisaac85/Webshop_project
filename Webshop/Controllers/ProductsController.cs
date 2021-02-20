@@ -1,26 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Core.Entities.ProductModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Core.Entities.ProductModels;
-using Infrastructure.Data;
-using System.Net.Http;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Webshop.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly WebshopDataContext _context;
-
-        public ProductsController(WebshopDataContext context)
-        {
-            _context = context;
-        }
-
-        // GET: Products
+        // GET: ProductsController
         public async Task<IActionResult> Index()
         {
             List<Product> productList = new List<Product>();
@@ -31,148 +23,102 @@ namespace Webshop.Controllers
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     productList = JsonConvert.DeserializeObject<List<Product>>(apiResponse);
                 }
-            }
+            }           
             return View(productList);
         }
 
-
-      
-
-        // GET: Products/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: ProductsController/Details/5       
+        public async Task<IActionResult> SearchProduct(string name)
         {
-            if (id == null)
+            if (string.IsNullOrWhiteSpace(name))
             {
-                return NotFound();
+                return RedirectToAction("Index", "Products");
             }
-
-            var product = await _context.Products
-                .Include(p => p.ProductBrand)
-                .Include(p => p.ProductType)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
+            List<Product> productList = new List<Product>();
+            if (ModelState.IsValid)
             {
-                return NotFound();
+                using (var httpClient = new HttpClient())
+                {
+                    using (var response = await httpClient.GetAsync($"https://localhost:5001/api/products/getproductbyname/{name}"))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();                    
+                        productList = JsonConvert.DeserializeObject<List<Product>>(apiResponse);                        
+                    }
+                }
+                if (productList.Any(i => i == null))
+                {
+                    TempData["Error"] = "Product Not Found";
+                    return RedirectToAction("Index", "Products");
+                }
+                else
+                {
+                    TempData["message"] = $"{productList.Count()} products found";
+                }
             }
-
-            return View(product);
+            return View("Index", productList);
         }
 
-        // GET: Products/Create
-        public IActionResult Create()
+        // GET: ProductsController/Create
+        public ActionResult Create()
         {
-            ViewData["ProductBrandId"] = new SelectList(_context.ProductBrands, "Id", "Id");
-            ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Id");
             return View();
         }
 
-        // POST: Products/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: ProductsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,Price,PictureUrl,ProductTypeId,ProductBrandId,Id")] Product product)
+        public ActionResult Create(IFormCollection collection)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductBrandId"] = new SelectList(_context.ProductBrands, "Id", "Id", product.ProductBrandId);
-            ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Id", product.ProductTypeId);
-            return View(product);
+            catch
+            {
+                return View();
+            }
         }
 
-        // GET: Products/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // GET: ProductsController/Edit/5
+        public ActionResult Edit(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-            ViewData["ProductBrandId"] = new SelectList(_context.ProductBrands, "Id", "Id", product.ProductBrandId);
-            ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Id", product.ProductTypeId);
-            return View(product);
+            return View();
         }
 
-        // POST: Products/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: ProductsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,Description,Price,PictureUrl,ProductTypeId,ProductBrandId,Id")] Product product)
+        public ActionResult Edit(int id, IFormCollection collection)
         {
-            if (id != product.Id)
+            try
             {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(product);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductExists(product.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductBrandId"] = new SelectList(_context.ProductBrands, "Id", "Id", product.ProductBrandId);
-            ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Id", product.ProductTypeId);
-            return View(product);
+            catch
+            {
+                return View();
+            }
         }
 
-        // GET: Products/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // GET: ProductsController/Delete/5
+        public ActionResult Delete(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var product = await _context.Products
-                .Include(p => p.ProductBrand)
-                .Include(p => p.ProductType)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            return View(product);
+            return View();
         }
 
-        // POST: Products/Delete/5
-        [HttpPost, ActionName("Delete")]
+        // POST: ProductsController/Delete/5
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public ActionResult Delete(int id, IFormCollection collection)
         {
-            var product = await _context.Products.FindAsync(id);
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool ProductExists(int id)
-        {
-            return _context.Products.Any(e => e.Id == id);
+            try
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
         }
     }
 }

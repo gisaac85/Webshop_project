@@ -11,7 +11,8 @@ using Microsoft.Extensions.Logging;
 namespace Infrastructure.Data
 {
     public class WebShopContextSeed
-    {
+    {     
+
         public static async Task SeedAsync(WebshopDataContext context, ILoggerFactory loggerFactory)
         {
             try
@@ -29,7 +30,7 @@ namespace Infrastructure.Data
                     {
                         context.ProductBrands.Add(item);
                     }
-
+                   
                     await context.SaveChangesAsync();
                 }
 

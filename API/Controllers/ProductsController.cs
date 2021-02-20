@@ -39,6 +39,14 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [Route("getproductbyname/{name}")]
+        public async Task<ActionResult<Product>> GetProductByName(string name)
+        {
+            var product = await _productsRepo.GetProductByNameAsync(name);
+            return Ok(product);
+        }
+
+        [HttpGet]
         [Route("getbrands")]
         public async Task<IReadOnlyList<ProductBrand>> GetProductBrandsAsync()
         {
