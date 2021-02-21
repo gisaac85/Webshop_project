@@ -11,7 +11,7 @@
 
                 <p class="text-danger">@TempData["Error"]</p>
                 <p class="text-danger">@TempData["message"]</p>
-               
+
 
                 @using (Html.BeginForm("SearchProduct", "Products", FormMethod.Get, new { @class = "form-inline my-2 my-lg-0 ml-auto" }))
                 {
@@ -25,7 +25,7 @@
 
             </nav>
         </div>
-       
+
         <div class="row">
             @if (Model != null)
             {
@@ -51,7 +51,7 @@
             }
             else
             {
-             <p>@TempData["Error"]</p>
+                <p>@TempData["Error"]</p>
             }
         </div>
     </div>

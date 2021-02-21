@@ -60,5 +60,13 @@ namespace API.Controllers
             return await _productsRepo.GetProductTypesAsync();
         }
 
+        [HttpGet]
+        [Route("getproductsbybrand/{brandId}")]
+        public async Task<ActionResult<Product>> GetProductsByBrandAsync(int brandId)
+        {
+            var products =  await _productsRepo.GetProductsByBrandAsync(brandId);
+            return Ok(products);
+        }
+
     }
 }
