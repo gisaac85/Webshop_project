@@ -1,8 +1,5 @@
-﻿using Core.Entities;
-using System;
+﻿using Core.Entities.ProductModels;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Core.Interfaces
@@ -10,9 +7,12 @@ namespace Core.Interfaces
     public interface IProductRepository
     {
         Task<Product> GetProductByIdAsync(int id);
+        Task<IReadOnlyList<Product>> GetProductByNameAsync(string name);
         Task<IReadOnlyList<Product>> GetProductsAsync();
         Task<IReadOnlyList<ProductBrand>> GetProductBrandsAsync();
+        Task<IReadOnlyList<Product>> GetProductsByBrandAsync(int id);
         Task<IReadOnlyList<ProductType>> GetProductTypesAsync();
 
     }
 }
+

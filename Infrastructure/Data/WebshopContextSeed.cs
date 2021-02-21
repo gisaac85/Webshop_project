@@ -5,14 +5,14 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Core.Entities;
-
+using Core.Entities.ProductModels;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Data
 {
     public class WebShopContextSeed
-    {
+    {     
+
         public static async Task SeedAsync(WebshopDataContext context, ILoggerFactory loggerFactory)
         {
             try
@@ -30,7 +30,7 @@ namespace Infrastructure.Data
                     {
                         context.ProductBrands.Add(item);
                     }
-
+                   
                     await context.SaveChangesAsync();
                 }
 

@@ -1,0 +1,18 @@
+﻿@model IEnumerable<Core.Entities.ProductModels.ProductType>
+
+<div class="float-left">   
+        <nav id="sidebar">
+            <div class="p-4 pt-5">              
+                <ul class="list-unstyled components mb-2">
+                    <li>                        
+                        <ul id="pageSubmenu1" class="list-unstyled components mb-2" style="line-height: 45px;">
+                            @foreach (var item in Model)
+                            {
+                                <li><a href="#"><span class="fa fa-chevron-right mr-2"></span>@item.Name</a></li>
+                            }                           
+                        </ul>
+                    </li>                   
+                </ul>
+            </div>
+        </nav>    
+</div>

@@ -1,7 +1,8 @@
 ﻿
 using Core.Entities;
-using Core.Entities.Order;
-using Infrastructure.Data.Config;
+using Core.Entities.OrderModels;
+using Core.Entities.ProductModels;
+using Infrastructure.Data.Configs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
