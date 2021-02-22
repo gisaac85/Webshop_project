@@ -34,6 +34,11 @@ namespace Infrastructure.Data.Repositories
            return await _context.Products.FromSqlRaw($"select * from Products where name = '{name}'").Include(p => p.ProductBrand).Include(p => p.ProductType).ToListAsync();
         }
 
+        public async Task<IReadOnlyList<Product>> GetProductsByTypeAsync(int id)
+        {
+            return await _context.Products.FromSqlRaw($"select * from Products where ProductTypeId={id}").Include(p => p.ProductBrand).Include(p => p.ProductType).ToListAsync();
+        }
+
         public async Task<IReadOnlyList<Product>> GetProductsAsync()
         {
             return await _context.Products.Include(p=>p.ProductBrand).Include(p=>p.ProductType).ToListAsync();
@@ -43,5 +48,7 @@ namespace Infrastructure.Data.Repositories
         {
             return await _context.ProductTypes.ToListAsync();
         }
+
+        
     }
 }

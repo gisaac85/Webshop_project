@@ -13,19 +13,25 @@ namespace Webshop.Controllers
     public class TypesController : Controller
     {
         // GET: TypesController
-        public async Task<IActionResult> Index()
+        //public async Task<IActionResult> Index()
+        //{
+        //    List<ProductType> productTypeList = new List<ProductType>();
+        //    using (var httpClient = new HttpClient())
+        //    {
+        //        using (var response = await httpClient.GetAsync("https://localhost:5001/api/products/gettypes"))
+        //        {
+        //            string apiResponse = await response.Content.ReadAsStringAsync();
+        //            productTypeList = JsonConvert.DeserializeObject<List<ProductType>>(apiResponse);
+        //        }
+        //    }
+        //    TempData["model"] = productTypeList;
+        //    return PartialView("~Views/Types/Index.cshtml",productTypeList);
+        //}
+
+        // GET: TypesController
+        public ActionResult Index()
         {
-            List<ProductType> productTypeList = new List<ProductType>();
-            using (var httpClient = new HttpClient())
-            {
-                using (var response = await httpClient.GetAsync("https://localhost:5001/api/products/gettypes"))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    productTypeList = JsonConvert.DeserializeObject<List<ProductType>>(apiResponse);
-                }
-            }
-            TempData["model"] = productTypeList;
-            return PartialView("~Views/Types/Index.cshtml",productTypeList);
+            return View();
         }
 
         // GET: TypesController/Details/5
