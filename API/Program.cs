@@ -26,12 +26,7 @@ namespace API
                 {
                     var context = services.GetRequiredService<WebshopDataContext>();
                     await context.Database.MigrateAsync();
-                    await WebShopContextSeed.SeedAsync(context, loggerFactory);
-
-                   // var userManager = services.GetRequiredService<UserManager<AppUser>>();
-                   // var identityContext = services.GetRequiredService<AppIdentityDbContext>();
-                   // await identityContext.Database.MigrateAsync();
-                    //await AppIdentityDbContextSeed.SeedUsersAsync(userManager);
+                    await WebShopContextSeed.SeedAsync(context, loggerFactory);                   
                 }
                 catch (Exception ex)
                 {
