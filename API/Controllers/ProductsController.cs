@@ -68,5 +68,13 @@ namespace API.Controllers
             return Ok(products);
         }
 
+        [HttpGet]
+        [Route("getproductsbytype/{typeId}")]
+        public async Task<ActionResult<Product>> GetProductsByTypeAsync(int typeId)
+        {
+            var products = await _productsRepo.GetProductsByTypeAsync(typeId);
+            return Ok(products);
+        }
+
     }
 }

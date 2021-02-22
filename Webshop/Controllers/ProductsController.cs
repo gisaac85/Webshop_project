@@ -126,8 +126,43 @@ namespace Webshop.Controllers
 
         }
 
-            // GET: ProductsController/Create
-            public ActionResult Create()
+        // GET: ProductsController/FetchProductsbyType/typeId
+        public async Task<IActionResult> FetchProductsByType(int typeId)
+        {
+            if (typeId == 0 || typeId < 0)
+            {
+                return RedirectToAction("Index", "Products");
+            }
+            List<Product> productList = new List<Product>();
+            if (ModelState.IsValid)
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    using (var response = await httpClient.GetAsync($"https://localhost:5001/api/products/getproductsbytype/{typeId}"))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        productList = JsonConvert.DeserializeObject<List<Product>>(apiResponse);
+                    }
+                }
+                if (productList.Any(i => i == null))
+                {
+                    TempData["Error"] = "Product Not Found";
+                    return RedirectToAction("Index", "Products");
+                }
+                else
+                {
+                    TempData["message"] = $"{productList.Count()} products found";
+                }
+            }
+            await FetchProductTypes();
+            await FetchProducBrands();
+            return View("Index", productList);
+        }
+
+
+
+        // GET: ProductsController/Create
+        public ActionResult Create()
         {
             return View();
         }
