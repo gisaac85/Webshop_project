@@ -30,6 +30,38 @@
     "PictureUrl": "https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2F14%2F92%2F14923b1fc8d956da058e0dee0c6fcb30aa775efc.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BDESCRIPTIVESTILLLIFE%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/main]",
     "ProductTypeId": 1,
     "ProductBrandId": 4
+  },
+  {
+    "Name": "Atlantis AT001",
+    "Description": "Atlantis AT001 - Start Five Cap",
+    "Price": 5,
+    "PictureUrl": "https://wordans-a1a5.kxcdn.com/files/model_specifications/2017/2/20/346661/346661_big.jpg?1592433038",
+    "ProductTypeId": 2,
+    "ProductBrandId": 3
+  },
+  {
+    "Name": "KARL KANI",
+    "Description": "Signature Bucket Hat",
+    "Price": 4,
+    "PictureUrl": "https://www.snipes.nl/dw/image/v2/BDCB_PRD/on/demandware.static/-/Sites-snse-master-eu/default/dw2c7312a7/1896802_P.jpg?sw=1560&sh=1560&sm=fit&sfrm=png",
+    "ProductTypeId": 2,
+    "ProductBrandId": 4
+  },
+  {
+    "Name": "Flat Cap",
+    "Description": "Belfast Classic Wool Flat Cap",
+    "Price": 7,
+    "PictureUrl": "https://img.hoedshop.nl/Belfast-Classic-Wool-Flat-Cap-by-Stetson-donkerbruin.41950_1rf17.jpg",
+    "ProductTypeId": 2,
+    "ProductBrandId": 1
+  },
+  {
+    "Name": "Black Lace Boat",
+    "Description": "Black lace boat coarse sole",
+    "Price": 7,
+    "PictureUrl": "https://deichmann.scene7.com/asset/deichmann/product-with-gradient/p_pd_gradiant_bigger/--1854674_P.jpg?defaultImage=default",
+    "ProductTypeId": 3,
+    "ProductBrandId": 1
   }
 
 ]
