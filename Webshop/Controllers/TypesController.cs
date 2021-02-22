@@ -15,17 +15,7 @@ namespace Webshop.Controllers
         // GET: TypesController
         public async Task<IActionResult> Index()
         {
-            List<ProductType> productTypeList = new List<ProductType>();
-            using (var httpClient = new HttpClient())
-            {
-                using (var response = await httpClient.GetAsync("https://localhost:5001/api/products/gettypes"))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    productTypeList = JsonConvert.DeserializeObject<List<ProductType>>(apiResponse);
-                }
-            }
-            TempData["model"] = productTypeList;
-            return PartialView("~Views/Types/Index.cshtml",productTypeList);
+            return View();
         }
 
         // GET: TypesController/Details/5
