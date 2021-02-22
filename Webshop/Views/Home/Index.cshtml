@@ -1,8 +1,44 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+﻿<form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="AddProduct">
+    <div class="form-group">
+        <div class="col-md-10">
+            <p>Upload image :</p>
+            <input type="file" name="PictureUrl" id="PictureUrl" />
+          
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-10">
+            <p>Description :</p>
+            <input type="text" name="description" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-10">
+            <p>name</p>
+            <input type="text" name="name" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-10">
+            <p>price</p>
+            <input type="text" name="price" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-10">
+            <p>type</p>
+            <input type="text" name="ProductTypeId" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-10">
+            <p>brand</p>
+            <input type="text" name="ProductBrandId" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-10">
+            <input type="submit" value="Upload" />
+        </div>
+    </div>
+</form>
