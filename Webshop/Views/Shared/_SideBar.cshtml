@@ -1,29 +1,24 @@
-﻿ <div class="float-left">
-        <div class="card">
-            <div class="card-header" id="headingOne">
-                <h5 class="mb-0">                    
+﻿ <div class="float-left m-3 mt-5">
+        <div class="card mt-5">
+            <div class="card-header bg-secondary">
+                <h5 class="mb-0 text-white">                    
                     Product Gategories                    
                 </h5>
-            </div>
-
-            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-                <div class="card-body">
-                    @Html.Partial("/Views/Types/Index.cshtml", TempData["types"])
-                </div>
-            </div>
+            </div>            
+            <div class="card-body">
+                @Html.Partial("/Views/Types/Index.cshtml", TempData["types"])
+            </div>            
         </div>
-        <div class="card">
-            <div class="card-header" id="headingTwo">
-                <h5 class="mb-0">
+        <div class="card mt-5">
+            <div class="card-header bg-secondary">
+                <h5 class="mb-0 text-white">
                     @*<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">*@
                     Product Brands
                     @*</button>*@
                 </h5>
             </div>
-            <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordion">
-                <div class="card-body">
-                    @Html.Partial("/Views/Brands/Index.cshtml", TempData["brands"])
-                </div>
-            </div>
+            <div class="card-body">
+                @Html.Partial("/Views/Brands/Index.cshtml", TempData["brands"])
+            </div>            
         </div>
     </div>
