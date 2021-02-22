@@ -31,7 +31,7 @@ namespace Infrastructure.Data.Repositories
 
         public async Task<IReadOnlyList<Product>> GetProductByNameAsync(string name)
         {            
-           return await _context.Products.FromSqlRaw($"select * from Products where name = '{name}'").Include(p => p.ProductBrand).Include(p => p.ProductType).ToListAsync();
+           return await _context.Products.FromSqlRaw($"select * from Products where lower(name) like '{name}'").Include(p => p.ProductBrand).Include(p => p.ProductType).ToListAsync();
         }
 
         public async Task<IReadOnlyList<Product>> GetProductsByTypeAsync(int id)
