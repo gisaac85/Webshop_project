@@ -55,12 +55,24 @@ namespace Webshop.Controllers
                     byteContent.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/json");
                     using (var response = await httpClient.PostAsync("https://localhost:5001/api/products/createproduct", byteContent))
                     {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        productList = JsonConvert.DeserializeObject<Product>(apiResponse);
+                        if(response.IsSuccessStatusCode)
+                        {
+                            //string apiResponse = await response.Content.ReadAsStringAsync();
+                            //productList = JsonConvert.DeserializeObject<Product>(apiResponse);
+
+                            // add image with that name to wwwroot/images/product phisycally
+                            TempData["msg"] = "Product Added sussccc";
+                            
+                        }
+                        else
+                        {
+                            TempData["msg"] = "not su";
+                        }
+                        
                     }
                 }
-
                 return RedirectToAction(nameof(Index));
+
             }
             catch
             {
