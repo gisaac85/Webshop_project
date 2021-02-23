@@ -6,12 +6,11 @@
 
 <div class="album py-5 bg-light">
     <div class="container">
-        <div>
+        <div class="mb-4">
             <nav class="navbar navbar-dark default-color">
 
                 <p class="text-danger">@TempData["Error"]</p>
                 <p class="text-danger">@TempData["message"]</p>
-
 
                 @using (Html.BeginForm("SearchProduct", "Products", FormMethod.Get, new { @class = "form-inline my-2 my-lg-0 ml-auto" }))
                 {
@@ -22,7 +21,6 @@
                 {
                     <input type="submit" value="Reset" class="btn btn-outline-danger btn-md my-2 my-sm-0 ml-3" />
                 }
-
             </nav>
         </div>
 
