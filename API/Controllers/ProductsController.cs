@@ -76,5 +76,12 @@ namespace API.Controllers
             return Ok(products);
         }
 
+        [HttpPost]
+        [Route("createproduct")]
+        public async Task<ActionResult<Product>> GetProductsByTypeAsync([FromBody] Product model)
+        {
+            var product = await _productsRepo.CreateProduct(model);
+            return Ok(product);
+        }
     }
 }
