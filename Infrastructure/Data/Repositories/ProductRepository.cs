@@ -2,6 +2,7 @@
 using Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Data.Repositories
@@ -21,7 +22,12 @@ namespace Infrastructure.Data.Repositories
 
         public async Task<IReadOnlyList<Product>> GetProductsByBrandAsync(int id)
         {
-            return await _context.Products.FromSqlRaw($"select * from Products where ProductBrandId={id}").Include(p => p.ProductBrand).Include(p => p.ProductType).ToListAsync();                            
+            return await _context.Products.Where(x=>x.ProductBrandId==id)
+                .Include(x => x.ProductBrand)
+                .Include(x => x.ProductType)
+                .Select(t => new Product(
+                  t.Id,t.Name,t.Description,t.Price,t.PictureUrl,t.ProductTypeId,t.ProductBrandId, t.ProductBrand, t.ProductType))
+                .ToListAsync();
         }
 
         public async Task<Product> GetProductByIdAsync(int id)
@@ -30,13 +36,24 @@ namespace Infrastructure.Data.Repositories
         }
 
         public async Task<IReadOnlyList<Product>> GetProductByNameAsync(string name)
-        {            
-           return await _context.Products.FromSqlRaw($"select * from Products where lower(name) like '{name}'").Include(p => p.ProductBrand).Include(p => p.ProductType).ToListAsync();
+        {
+            return await _context.Products.Where(x => x.Name.ToLower() == name || x.Name.ToUpper() == name || x.Name == name).Include(x => x.ProductBrand).Include(x => x.ProductType).
+                Select(t => new Product
+                     (
+                       t.Id, t.Name, t.Description, t.Price, t.PictureUrl, t.ProductTypeId, t.ProductBrandId,t.ProductBrand,t.ProductType
+                     )
+                )
+                .ToListAsync();
         }
 
         public async Task<IReadOnlyList<Product>> GetProductsByTypeAsync(int id)
         {
-            return await _context.Products.FromSqlRaw($"select * from Products where ProductTypeId={id}").Include(p => p.ProductBrand).Include(p => p.ProductType).ToListAsync();
+            return await _context.Products.Where(x => x.ProductTypeId == id)
+                .Include(x => x.ProductBrand)
+                .Include(x => x.ProductType)
+                .Select(t => new Product(
+                      t.Id, t.Name, t.Description, t.Price, t.PictureUrl, t.ProductTypeId, t.ProductBrandId, t.ProductBrand, t.ProductType))
+                .ToListAsync();
         }
 
         public async Task<IReadOnlyList<Product>> GetProductsAsync()
