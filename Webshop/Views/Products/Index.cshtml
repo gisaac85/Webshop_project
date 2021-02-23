@@ -15,8 +15,8 @@
 
                 @using (Html.BeginForm("SearchProduct", "Products", FormMethod.Get, new { @class = "form-inline my-2 my-lg-0 ml-auto" }))
                 {
-                    <input type="text" id="name" name="name" class="form-control" placeholder="Search a Product..." aria-label="Search" />
-                    <input type="submit" id="search" name="search" value="Search" class="btn btn-outline-dark btn-md my-2 my-sm-0 ml-3" />
+                    <input type="text" name="name" class="form-control" placeholder="Search a Product..." aria-label="Search" />
+                    <input type="submit" value="Search" class="btn btn-outline-dark btn-md my-2 my-sm-0 ml-3" />
                 }
                 @using (Html.BeginForm("Index", "Products", FormMethod.Get))
                 {
