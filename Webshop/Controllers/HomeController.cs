@@ -1,5 +1,6 @@
 ﻿using Core.Entities.ProductModels;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -19,11 +20,13 @@ namespace Webshop.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;      
+        private readonly ILogger<HomeController> _logger;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment hostEnvironment)
         {
-            _logger = logger;            
+            _logger = logger;
+            _hostEnvironment = hostEnvironment;
         }
 
         public async Task<IActionResult> Index()
@@ -44,7 +47,10 @@ namespace Webshop.Controllers
                 var imageName = Path.GetFileName(posted.FileName);              
                 string url =$"https://{Request.HttpContext.Request.Host.Value}/images/products/";                                
                 string newPath = Path.Combine(url, imageName);
-                model.PictureUrl = newPath;                
+                model.PictureUrl = newPath;
+
+                
+                
 
                 Product productList = new Product();
                 using (var httpClient = new HttpClient())
@@ -57,16 +63,21 @@ namespace Webshop.Controllers
                     {
                         if(response.IsSuccessStatusCode)
                         {
-                            //string apiResponse = await response.Content.ReadAsStringAsync();
-                            //productList = JsonConvert.DeserializeObject<Product>(apiResponse);
+                            // Add image with that name to wwwroot/images/product phisycally
+                            // Save image to wwwroot/image
+                            string wwwRootPath = _hostEnvironment.WebRootPath;
+                            string imagePath = Path.Combine(wwwRootPath + "/images/Products", imageName);
 
-                            // add image with that name to wwwroot/images/product phisycally
-                            TempData["msg"] = "Product Added sussccc";
-                            
+                            using (var fileStream = new FileStream(imagePath, FileMode.Create))
+                            {
+                                await posted.CopyToAsync(fileStream);
+                            }
+
+                            TempData["msg"] = "Product is added succesfully!";                            
                         }
                         else
                         {
-                            TempData["msg"] = "not su";
+                            TempData["msg"] = "Error!!! Product couldn't be added!";
                         }
                         
                     }

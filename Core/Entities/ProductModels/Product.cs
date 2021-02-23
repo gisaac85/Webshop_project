@@ -7,7 +7,7 @@ namespace Core.Entities.ProductModels
             Id = id;
             Name = name;
             Description = description;
-           Price = price;
+            Price = price;
             PictureUrl=pictureUrl;
             ProductBrandId = productBrnadId ;
             ProductTypeId = productTypeId;
