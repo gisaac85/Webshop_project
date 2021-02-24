@@ -31,9 +31,23 @@ namespace Webshop.Controllers
 
         public async Task<IActionResult> Index()
         {
+            List<Product> productList = new List<Product>();
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync("https://localhost:5001/api/products/getallproducts"))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    productList = JsonConvert.DeserializeObject<List<Product>>(apiResponse);
+                }
+            }
             var sharedMethod = new SharedSpace();
             TempData["types"] = await sharedMethod.FetchProductTypes();
             TempData["brands"] = await sharedMethod.FetchProducBrands();
+            return View(productList);
+        }
+
+        public IActionResult AddProduct()
+        {
             return View();
         }
 
@@ -47,9 +61,7 @@ namespace Webshop.Controllers
                 var imageName = Path.GetFileName(posted.FileName);              
                 string url =$"https://{Request.HttpContext.Request.Host.Value}/images/products/";                                
                 string newPath = Path.Combine(url, imageName);
-                model.PictureUrl = newPath;
-
-                
+                model.PictureUrl = newPath;               
                 
 
                 Product productList = new Product();

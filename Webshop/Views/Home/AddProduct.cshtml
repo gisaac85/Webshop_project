@@ -1,0 +1,56 @@
+﻿
+<p class="p-3 mb-2 text-success">@TempData["msg"]</p>
+
+<div class="card mt-5">
+    <div class="card-header h4">
+        Add Product
+    </div>
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="AddProduct">
+
+            <div class="form-group row">
+                <label for="name" class="col-sm-3 col-form-label">Name</label>
+                <div class="col-sm-6">
+                    <input type="text" name="name" id="name" class="form-control form-control-sm" required />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="description" class="col-sm-3 col-form-label">Description</label>
+                <div class="col-sm-6">
+                    <input type="text" name="description" id="description" class="form-control form-control-sm" required />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="price" class="col-sm-3 col-form-label">Price</label>
+                <div class="col-sm-6">
+                    <input type="text" name="price" id="price" class="form-control form-control-sm" required />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ProductTypeId" class="col-sm-3 col-form-label">Product Type</label>
+                <div class="col-sm-6">
+                    <input type="text" name="ProductTypeId" id="ProductTypeId" class="form-control form-control-sm" required />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ProductBrandId" class="col-sm-3 col-form-label">Product Brand</label>
+                <div class="col-sm-6">
+                    <input type="text" name="ProductBrandId" id="ProductBrandId" class="form-control form-control-sm" required />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="PictureUrl" class="col-sm-3 col-form-label">Upload Image</label>
+                <div class="col-sm-6">
+                    <input type="file" name="PictureUrl" id="PictureUrl" class="form-control-file" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
