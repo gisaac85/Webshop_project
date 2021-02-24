@@ -4,8 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
+<p class="p-3 mb-2 text-success">@TempData["msg"]</p>
 <p>
     <a asp-action="AddProduct">Create New Product</a>
 </p>
@@ -56,8 +55,7 @@
                 @Html.DisplayFor(modelItem => item.ProductType.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |                
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>

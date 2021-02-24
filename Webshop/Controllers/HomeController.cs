@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
@@ -46,12 +47,23 @@ namespace Webshop.Controllers
             return View(productList);
         }
 
-        public IActionResult AddProduct()
+        [HttpGet]
+        public async Task<IActionResult> AddProduct()
         {
-            return View();
+            
+            var sharedMethod = new SharedSpace();
+            TempData["types"] = await sharedMethod.FetchProductTypes();
+            TempData["brands"] = await sharedMethod.FetchProducBrands();
+
+            var x = await sharedMethod.FetchProducBrands();
+            TempData["brandlist"] = x.Select(x => x.Name).FirstOrDefault();
+            CreateProductBrandSelectlist();
+            CreateProductTypeSelectlist();
+            return View("AddProduct");
         }
 
        // httppost
+       [HttpPost]
         public async Task<IActionResult> AddProduct(Product model)
         {
             try
@@ -63,7 +75,6 @@ namespace Webshop.Controllers
                 string newPath = Path.Combine(url, imageName);
                 model.PictureUrl = newPath;               
                 
-
                 Product productList = new Product();
                 using (var httpClient = new HttpClient())
                 {
@@ -102,8 +113,15 @@ namespace Webshop.Controllers
                 return View();
             }
         }
-            
 
+        private void CreateProductBrandSelectlist(int selectedPriority = 0)
+        {
+            ViewData["productBrandList"] = new SelectList((List<ProductBrand>)TempData["brands"], nameof(ProductBrand.Id), nameof(ProductBrand.Name), selectedPriority);            
+        }
+        private void CreateProductTypeSelectlist(int selectedPriority = 0)
+        {
+            ViewData["productTypeList"] = new SelectList((List<ProductType>)TempData["types"], nameof(ProductType.Id), nameof(ProductType.Name), selectedPriority);
+        }
 
         public IActionResult Privacy()
         {

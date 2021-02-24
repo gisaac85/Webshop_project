@@ -6,7 +6,7 @@
                 </h5>
             </div>            
             <div class="card-body">
-                @Html.Partial("/Views/Types/Index.cshtml", TempData["types"])
+                @await Html.PartialAsync("/Views/Types/Index.cshtml", TempData["types"])
             </div>            
         </div>
         <div class="card mt-5">
@@ -16,7 +16,7 @@
                 </h5>
             </div>
             <div class="card-body">
-                @Html.Partial("/Views/Brands/Index.cshtml", TempData["brands"])
+                @await Html.PartialAsync("/Views/Brands/Index.cshtml", TempData["brands"])
             </div>            
         </div>
     </div>
