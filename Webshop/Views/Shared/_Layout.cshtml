@@ -6,6 +6,7 @@
     <title>Home - Webshop</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <script src="~/lib/fontawesome-free-5.15.2-web/css/all.css"></script>
 </head>
 <body>
     <header>
@@ -13,7 +14,7 @@
     </header>
     @Html.Partial("/Views/Shared/_SideBar.cshtml")
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-3 ml-5">
             @RenderBody()
         </main>
     </div>
@@ -25,6 +26,7 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/fontawesome-free-5.15.2-web/js/all.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

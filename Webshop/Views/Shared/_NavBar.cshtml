@@ -1,16 +1,61 @@
-﻿<nav class="navbar navbar-expand navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Webshop</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample02" aria-controls="navbarsExample02" aria-expanded="false" aria-label="Toggle navigation">
+﻿@*<nav class="navbar navbar-expand navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Webshop</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample02" aria-controls="navbarsExample02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarsExample02">
+            <ul class="navbar-nav mr-auto" style="margin-left: 30px; margin-right: 30px;">
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Administrator Panel</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="" asp-controller="Products" asp-action="Index">Products</a>
+                </li>
+            </ul>
+        </div>
+    </nav>*@
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand navbar-dark bg-dark">
+
+    <a class="navbar-brand" asp-controller="Products" asp-action="Index">
+        <img src="~/images/Webshop-logo.png" height="50" alt="mdb logo">
+    </a>
+
+    <!-- Collapse button -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav1"
+            aria-controls="basicExampleNav1" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarsExample02">
-        <ul class="navbar-nav mr-auto">
+   
+    <!-- Breadcrumbs -->
+    <!-- Links -->
+    <div class="collapse navbar-collapse" id="basicExampleNav1">
+
+        <!-- Right -->
+        <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Administrator Panel</a>
+                <a href="#!" class="nav-link navbar-link-2 waves-effect">
+                    <span class="badge badge-pill red">1</span>
+                    <i class="fas fa-shopping-cart fa-1x mr-5 text-light"></i>
+                </a>
+            </li>           
+            <li class="nav-item">               
+                <a class="nav-link waves-effect" asp-area="" asp-controller="Home" asp-action="Index">Administrator Panel</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" asp-area="" asp-controller="Products" asp-action="Index">Products</a>
+                <a href="#!" class="nav-link waves-effect">Contact</a>
+            </li>
+            <li class="nav-item">
+                <a href="#!" class="nav-link waves-effect">Sign in</a>
+            </li>
+            <li class="nav-item pl-2 mb-2 mb-md-0">
+                <a href="#!" type="button" class="btn btn-outline-info btn-md btn-rounded btn-navbar waves-effect waves-light">Sign up</a>
             </li>
         </ul>
+
     </div>
+    <!-- Links -->
+
 </nav>
+<!-- Navbar -->

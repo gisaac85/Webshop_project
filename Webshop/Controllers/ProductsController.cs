@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Webshop.SharedMethods;
 
 namespace Webshop.Controllers
 {
@@ -24,40 +25,11 @@ namespace Webshop.Controllers
                     productList = JsonConvert.DeserializeObject<List<Product>>(apiResponse);
                 }
             }
-            await FetchProductTypes();
-            await FetchProducBrands();
+            var sharedMethod = new SharedSpace();
+            TempData["types"] = await sharedMethod.FetchProductTypes();
+            TempData["brands"] = await sharedMethod.FetchProducBrands();
             return View(productList);
-        }
-
-        public async Task<IActionResult> FetchProductTypes()
-        {
-            List<ProductType> productTypeList = new List<ProductType>();
-            using (var httpClient = new HttpClient())
-            {
-                using (var response = await httpClient.GetAsync("https://localhost:5001/api/products/gettypes"))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    productTypeList = JsonConvert.DeserializeObject<List<ProductType>>(apiResponse);
-                }
-            }
-            TempData["types"] = productTypeList;
-            return PartialView("~Views/Types/Index.cshtml", productTypeList);
-        }
-
-        public async Task<IActionResult> FetchProducBrands()
-        {
-            List<ProductBrand> productBrandList = new List<ProductBrand>();
-            using (var httpClient = new HttpClient())
-            {
-                using (var response = await httpClient.GetAsync("https://localhost:5001/api/products/getbrands"))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    productBrandList = JsonConvert.DeserializeObject<List<ProductBrand>>(apiResponse);
-                }
-            }
-            TempData["brands"] = productBrandList;
-            return PartialView("~Views/Brands/Index.cshtml", productBrandList);
-        }
+        }     
 
         // GET: ProductsController/SearchProducts/productName      
         public async Task<IActionResult> SearchProduct(string name)
@@ -87,8 +59,9 @@ namespace Webshop.Controllers
                     TempData["message"] = $"{productList.Count()} products found";
                 }
             }
-            await FetchProductTypes();
-            await FetchProducBrands();
+            var sharedMethod = new SharedSpace();
+            TempData["types"] = await sharedMethod.FetchProductTypes();
+            TempData["brands"] = await sharedMethod.FetchProducBrands();
             return View("Index", productList);
         }
 
@@ -120,8 +93,9 @@ namespace Webshop.Controllers
                     TempData["message"] = $"{productList.Count()} products found";
                 }
             }
-            await FetchProductTypes();
-            await FetchProducBrands();
+            var sharedMethod = new SharedSpace();
+            TempData["types"] = await sharedMethod.FetchProductTypes();
+            TempData["brands"] = await sharedMethod.FetchProducBrands();
             return View("Index", productList);
 
         }
@@ -154,8 +128,9 @@ namespace Webshop.Controllers
                     TempData["message"] = $"{productList.Count()} products found";
                 }
             }
-            await FetchProductTypes();
-            await FetchProducBrands();
+            var sharedMethod = new SharedSpace();
+            TempData["types"] = await sharedMethod.FetchProductTypes();
+            TempData["brands"] = await sharedMethod.FetchProducBrands();
             return View("Index", productList);
         }
 

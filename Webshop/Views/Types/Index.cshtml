@@ -2,18 +2,17 @@
 
 <div class="float-left">   
         <nav id="sidebar">
-            <div class="p-2">              
-                <ul class="list-unstyled components mb-2">
-                    <li>                        
-                        <ul id="pageSubmenu1" class="list-unstyled components mb-2" style="line-height: 45px;">
-                            @foreach (var item in Model)
-                            {
-                                <li>
-                                    @Html.ActionLink(item.Name.ToString(), "FetchProductsByType", "Products", new { typeId = item.Id }, null)
-                                </li>
-                            }
-                        </ul>
-                    </li>                   
+            <div class="p-2">                       
+                <ul id="pageSubmenu1" class="list-unstyled components mb-2" style="line-height: 40px;">
+                    <li>
+                        @Html.ActionLink("All", "Index", "Products", null)
+                    </li>
+                    @foreach (var item in Model)
+                    {
+                        <li>
+                            @Html.ActionLink(item.Name.ToString(), "FetchProductsByType", "Products", new { typeId = item.Id }, null)
+                        </li>
+                    }
                 </ul>
             </div>
         </nav>    

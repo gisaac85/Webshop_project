@@ -3,7 +3,7 @@
     "Name": "Sport-FY0377",
     "Description": "New sport shoes from Addidas",
     "Price": 120,
-    "PictureUrl": "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/429a510e09fe4039ba33ac770135d8be_9366/Ultraboost_21_Schoenen_Wit_FY0377_01_standard.jpg",
+    "PictureUrl": "https://localhost:44325/images/products/image006.jpg",
     "ProductTypeId": 1,
     "ProductBrandId": 2
   },
@@ -11,7 +11,7 @@
     "Name": "Sport-DB0156",
     "Description": "New sport shoes from Addidas",
     "Price": 150,
-    "PictureUrl": "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/8e8eb6ba3e6d4ab48362a82e01272749_9366/Daily_2.0_Schoenen_Grijs_DB0156_01_standard.jpg",
+    "PictureUrl": "https://localhost:44325/images/products/image005.jpg",
     "ProductTypeId": 1,
     "ProductBrandId": 2
   },
@@ -19,7 +19,7 @@
     "Name": "SOFT TRAINERS",
     "Description": "Zara trainers",
     "Price": 90,
-    "PictureUrl": "https://static.zara.net/photos///2021/V/1/1/p/2438/710/090/2/w/1900/2438710090_6_1_1.jpg?ts=1613552128733",
+    "PictureUrl": "https://localhost:44325/images/products/image004.webp",
     "ProductTypeId": 1,
     "ProductBrandId": 1
   },
@@ -27,7 +27,7 @@
     "Name": "Sneakers",
     "Description": "Mesh Sneakers",
     "Price": 50,
-    "PictureUrl": "https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2F14%2F92%2F14923b1fc8d956da058e0dee0c6fcb30aa775efc.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BDESCRIPTIVESTILLLIFE%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/main]",
+    "PictureUrl": "https://localhost:44325/images/products/image003.jfif",
     "ProductTypeId": 1,
     "ProductBrandId": 4
   },
@@ -35,7 +35,7 @@
     "Name": "Atlantis AT001",
     "Description": "Atlantis AT001 - Start Five Cap",
     "Price": 5,
-    "PictureUrl": "https://wordans-a1a5.kxcdn.com/files/model_specifications/2017/2/20/346661/346661_big.jpg?1592433038",
+    "PictureUrl": "https://localhost:44325/images/products/image002.jpg",
     "ProductTypeId": 2,
     "ProductBrandId": 3
   },
@@ -43,7 +43,7 @@
     "Name": "KARL KANI",
     "Description": "Signature Bucket Hat",
     "Price": 4,
-    "PictureUrl": "https://www.snipes.nl/dw/image/v2/BDCB_PRD/on/demandware.static/-/Sites-snse-master-eu/default/dw2c7312a7/1896802_P.jpg?sw=1560&sh=1560&sm=fit&sfrm=png",
+    "PictureUrl": "https://localhost:44325/images/products/image001.webp",
     "ProductTypeId": 2,
     "ProductBrandId": 4
   },
@@ -51,7 +51,7 @@
     "Name": "Flat Cap",
     "Description": "Belfast Classic Wool Flat Cap",
     "Price": 7,
-    "PictureUrl": "https://img.hoedshop.nl/Belfast-Classic-Wool-Flat-Cap-by-Stetson-donkerbruin.41950_1rf17.jpg",
+    "PictureUrl": "https://localhost:44325/images/products/image007.jpg",
     "ProductTypeId": 2,
     "ProductBrandId": 1
   },
@@ -59,7 +59,7 @@
     "Name": "Black Lace Boat",
     "Description": "Black lace boat coarse sole",
     "Price": 7,
-    "PictureUrl": "https://deichmann.scene7.com/asset/deichmann/product-with-gradient/p_pd_gradiant_bigger/--1854674_P.jpg?defaultImage=default",
+    "PictureUrl": "https://localhost:44325/images/products/image008.webp",
     "ProductTypeId": 3,
     "ProductBrandId": 1
   }
