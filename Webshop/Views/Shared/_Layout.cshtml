@@ -10,9 +10,9 @@
 </head>
 <body>
     <header>
-        @Html.Partial("/Views/Shared/_NavBar.cshtml")
+        @await Html.PartialAsync("/Views/Shared/_NavBar.cshtml")
     </header>
-    @Html.Partial("/Views/Shared/_SideBar.cshtml")
+        @await Html.PartialAsync("/Views/Shared/_SideBar.cshtml")
     <div class="container">
         <main role="main" class="pb-3 ml-5">
             @RenderBody()
