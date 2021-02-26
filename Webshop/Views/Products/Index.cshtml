@@ -22,8 +22,10 @@
 
                     </select>
                 }
+
                 <p class="text-danger">@TempData["Error"]</p>
                 <p class="text-danger">@TempData["message"]</p>
+
                 @using (Html.BeginForm("SearchProduct", "Products", FormMethod.Get, new { @class = "form-inline my-2 my-lg-0 ml-auto" }))
                 {
                     <input type="text" name="name" class="form-control" placeholder="Search a Product..." aria-label="Search" />

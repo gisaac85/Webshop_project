@@ -1,6 +1,6 @@
 ﻿@using Core.Entities.ProductModels;
 
-@model Core.Entities.ProductModels.Product
+@model Core.Dtos.ProductToReturnDto
 
 
 
@@ -48,13 +48,13 @@
             <div class="form-group row">
                 <label for="ProductType" class="col-sm-3 col-form-label">Product Type</label>
                 <div class="col-sm-6">
-                    @Html.DisplayFor(model => model.ProductType.Name)
+                    @Html.DisplayFor(model => model.ProductType)
                 </div>
             </div>
             <div class="form-group row">
                 <label for="ProductType" class="col-sm-3 col-form-label">Product Brand</label>
                 <div class="col-sm-6">
-                    @Html.DisplayFor(model => model.ProductBrand.Name)
+                    @Html.DisplayFor(model => model.ProductBrand)
                 </div>
             </div>
         </form>
