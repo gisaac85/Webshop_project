@@ -72,5 +72,26 @@ namespace Infrastructure.Data.Repositories
             await _context.SaveChangesAsync();
             return model;
         }
+
+        public async Task<IReadOnlyList<Product>> SortProductByFilter(int? filter)
+        {
+            List<Product> products = new List<Product>();
+            if(filter!=null)
+            {
+                switch(filter)
+                {
+                    case 0:
+                        products= await _context.Products.OrderBy(p => p.Price).Include(p => p.ProductBrand).Include(p => p.ProductType).ToListAsync();
+                        break;
+                    case 1:
+                        products = await _context.Products.OrderByDescending(p => p.Price).Include(p => p.ProductBrand).Include(p => p.ProductType).ToListAsync();
+                        break;                  
+                    default:
+                        products = await _context.Products.OrderBy(p => p.Name).Include(p => p.ProductBrand).Include(p => p.ProductType).ToListAsync();
+                        break;
+                }
+            }
+            return products;           
+        }
     }
 }

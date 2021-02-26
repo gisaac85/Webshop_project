@@ -1,4 +1,5 @@
-﻿using Core.Entities.ProductModels;
+﻿using Core.Dtos;
+using Core.Entities.ProductModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -32,13 +33,13 @@ namespace Webshop.Controllers
 
         public async Task<IActionResult> Index()
         {
-            List<Product> productList = new List<Product>();
+            List<ProductToReturnDto> productList = new List<ProductToReturnDto>();
             using (var httpClient = new HttpClient())
             {
                 using (var response = await httpClient.GetAsync("https://localhost:5001/api/products/getallproducts"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    productList = JsonConvert.DeserializeObject<List<Product>>(apiResponse);
+                    productList = JsonConvert.DeserializeObject<List<ProductToReturnDto>>(apiResponse);
                 }
             }
             var sharedMethod = new SharedSpace();
