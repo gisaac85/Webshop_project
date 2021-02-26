@@ -1,4 +1,5 @@
-﻿using Core.Entities.ProductModels;
+﻿using Core.Dtos;
+using Core.Entities.ProductModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -32,13 +33,13 @@ namespace Webshop.Controllers
 
         public async Task<IActionResult> Index()
         {
-            List<Product> productList = new List<Product>();
+            List<ProductToReturnDto> productList = new List<ProductToReturnDto>();
             using (var httpClient = new HttpClient())
             {
                 using (var response = await httpClient.GetAsync("https://localhost:5001/api/products/getallproducts"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    productList = JsonConvert.DeserializeObject<List<Product>>(apiResponse);
+                    productList = JsonConvert.DeserializeObject<List<ProductToReturnDto>>(apiResponse);
                 }
             }
             var sharedMethod = new SharedSpace();
@@ -114,13 +115,156 @@ namespace Webshop.Controllers
             }
         }
 
-        private void CreateProductBrandSelectlist(int selectedPriority = 0)
+        [HttpGet]
+        public async Task<IActionResult> EditProduct(int id)
         {
-            ViewData["productBrandList"] = new SelectList((List<ProductBrand>)TempData["brands"], nameof(ProductBrand.Id), nameof(ProductBrand.Name), selectedPriority);            
+            ProductToReturnDto product = new ProductToReturnDto();
+
+            if (ModelState.IsValid)
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    using (var response = await httpClient.GetAsync($"https://localhost:5001/api/products/getproduct/{id}"))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        product = JsonConvert.DeserializeObject<ProductToReturnDto>(apiResponse);
+                    }
+                }
+                if (product == null)
+                {
+                    TempData["Error"] = "Product Not Found";
+                    return RedirectToAction("Index", "Products");
+                }
+                else
+                {
+                    TempData["message"] = $"{product} products found";
+                }
+            }
+            var sharedMethod = new SharedSpace();
+            TempData["types"] = await sharedMethod.FetchProductTypes();
+            TempData["brands"] = await sharedMethod.FetchProducBrands();
+
+            CreateProductBrandSelectlist();
+            CreateProductTypeSelectlist();
+
+            return View("EditProduct", product);
         }
-        private void CreateProductTypeSelectlist(int selectedPriority = 0)
+
+        [HttpPost]
+        public async Task<IActionResult> EditProduct(Product product)
         {
-            ViewData["productTypeList"] = new SelectList((List<ProductType>)TempData["types"], nameof(ProductType.Id), nameof(ProductType.Name), selectedPriority);
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    using (var httpClient = new HttpClient())
+                    {
+                        var myContent = JsonConvert.SerializeObject(product);
+                        var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+                        var byteContent = new ByteArrayContent(buffer);
+                        byteContent.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/json");
+
+                        using (var response = await httpClient.PostAsync($"https://localhost:5001/api/products/editproduct", byteContent))
+                        {
+                            if (response.IsSuccessStatusCode)
+                            {
+
+                                TempData["msg"] = "Product is updated succesfully!";
+                            }
+                            else
+                            {
+                                TempData["msg"] = "Error!!! Product couldn't be updated!";
+                            }
+                        }
+
+                    }
+
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception)
+                {
+                    return View();
+                }
+            }
+            return View(product);
+        }
+
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            ProductToReturnDto product = new ProductToReturnDto();
+
+            if (ModelState.IsValid)
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    using (var response = await httpClient.GetAsync($"https://localhost:5001/api/products/getproduct/{id}"))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        product = JsonConvert.DeserializeObject<ProductToReturnDto>(apiResponse);
+                    }
+                }
+                if (product == null)
+                {
+                    TempData["Error"] = "Product Not Found";
+                    return RedirectToAction("Index", "Products");
+                }
+                else
+                {
+                    TempData["message"] = $"{product} found";
+                }
+            }
+            var sharedMethod = new SharedSpace();
+            TempData["types"] = await sharedMethod.FetchProductTypes();
+            TempData["brands"] = await sharedMethod.FetchProducBrands();
+
+            CreateProductBrandSelectlist();
+            CreateProductTypeSelectlist();
+
+            return View("DeleteProduct", product);
+        }
+
+        [HttpPost, ActionName("DeleteProduct")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirmed(int id, Product product)
+        {
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    var myContent = JsonConvert.SerializeObject(product);
+                    var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+                    var byteContent = new ByteArrayContent(buffer);
+                    byteContent.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/json");
+
+                    using (var response = await httpClient.PostAsync($"https://localhost:5001/api/products/deleteproduct/{id}", byteContent))
+                    {
+                        if (response.IsSuccessStatusCode)
+                        {
+
+                            TempData["msg"] = "Product is deleted succesfully!";
+                        }
+                        else
+                        {
+                            TempData["msg"] = "Error!!! Product couldn't be deleted!";
+                        }
+                    }
+                }
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        private void CreateProductBrandSelectlist(int selectedBrand = 0)
+        {
+            ViewData["productBrandList"] = new SelectList((List<ProductBrand>)TempData["brands"], nameof(ProductBrand.Id), nameof(ProductBrand.Name), selectedBrand);            
+        }
+        private void CreateProductTypeSelectlist(int selectedType = 0)
+        {
+            ViewData["productTypeList"] = new SelectList((List<ProductType>)TempData["types"], nameof(ProductType.Id), nameof(ProductType.Name), selectedType);
         }
 
         public IActionResult Privacy()
