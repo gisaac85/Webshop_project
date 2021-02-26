@@ -83,5 +83,21 @@ namespace API.Controllers
             var product = await _productsRepo.CreateProduct(model);
             return Ok(product);
         }
+
+        [HttpPost]
+        [Route("editproduct")]
+        public async Task<ActionResult<Product>> EditProductAsync([FromBody] Product model)
+        {
+            var product = await _productsRepo.EditProduct(model);
+            return Ok(product);
+        }
+
+        [HttpPost]
+        [Route("deleteproduct/{id}")]
+        public async Task<ActionResult<Product>> DeleteProductAsync(int id)
+        {
+            var product = await _productsRepo.DeleteProduct(id);
+            return Ok(product);
+        }
     }
 }
