@@ -118,7 +118,7 @@ namespace Webshop.Controllers
         [HttpGet]
         public async Task<IActionResult> EditProduct(int id)
         {
-            Product product = new Product();
+            ProductToReturnDto product = new ProductToReturnDto();
 
             if (ModelState.IsValid)
             {
@@ -127,7 +127,7 @@ namespace Webshop.Controllers
                     using (var response = await httpClient.GetAsync($"https://localhost:5001/api/products/getproduct/{id}"))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
-                        product = JsonConvert.DeserializeObject<Product>(apiResponse);
+                        product = JsonConvert.DeserializeObject<ProductToReturnDto>(apiResponse);
                     }
                 }
                 if (product == null)
