@@ -15,6 +15,8 @@ namespace Core.Interfaces
         Task<IReadOnlyList<ProductType>> GetProductTypesAsync();
         Task<Product> CreateProduct(Product model);
         Task<IReadOnlyList<Product>> SortProductByFilter(int? filter);
+        Task<Product> EditProduct(Product model);
+        Task<Product> DeleteProduct(int id);
 
     }
 }

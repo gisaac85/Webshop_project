@@ -32,7 +32,12 @@ namespace Infrastructure.Data.Repositories
 
         public async Task<Product> GetProductByIdAsync(int id)
         {
-            return await _context.Products.Include(p => p.ProductBrand).Include(p => p.ProductType).FirstOrDefaultAsync(p=>p.Id == id);
+            return await _context.Products.Where(x => x.Id == id)
+                .Include(x => x.ProductBrand)
+                .Include(x => x.ProductType)
+                .Select(x => new Product(
+                 x.Id, x.Name, x.Description, x.Price, x.PictureUrl, x.ProductTypeId, x.ProductBrandId, x.ProductBrand, x.ProductType))
+                .FirstOrDefaultAsync();
         }
 
         public async Task<IReadOnlyList<Product>> GetProductByNameAsync(string name)
@@ -73,6 +78,13 @@ namespace Infrastructure.Data.Repositories
             return model;
         }
 
+        public async Task<Product> EditProduct(Product model)
+        {
+            _context.Products.Update(model);
+            await _context.SaveChangesAsync();
+            return model;
+        }
+
         public async Task<IReadOnlyList<Product>> SortProductByFilter(int? filter)
         {
             List<Product> products = new List<Product>();
@@ -92,6 +104,14 @@ namespace Infrastructure.Data.Repositories
                 }
             }
             return products;           
+        }
+
+        public async Task<Product> DeleteProduct(int id)
+        {
+            var product = _context.Products.FindAsync(id).Result;
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+            return product;
         }
     }
 }

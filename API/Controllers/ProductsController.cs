@@ -96,5 +96,21 @@ namespace API.Controllers
             var productsDto = _mapper.Map<IReadOnlyList<Product>,IReadOnlyList<ProductToReturnDto>>(products);         
             return Ok(productsDto);            
         }
+
+        [HttpPost]
+        [Route("editproduct")]
+        public async Task<ActionResult<Product>> EditProductAsync([FromBody] Product model)
+        {
+            var product = await _productsRepo.EditProduct(model);
+            return Ok(product);
+        }
+
+        [HttpPost]
+        [Route("deleteproduct/{id}")]
+        public async Task<ActionResult<Product>> DeleteProductAsync(int id)
+        {
+            var product = await _productsRepo.DeleteProduct(id);
+            return Ok(product);
+        }
     }
 }
