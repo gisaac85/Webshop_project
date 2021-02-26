@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Core.Entities.ProductModels.Product>
+﻿@model IEnumerable<Core.Dtos.ProductToReturnDto>
+@using Webshop.Models.Enums;
 
 @{
     ViewData["Title"] = "Webshop";
@@ -9,9 +10,20 @@
         <div class="mb-4">
             <nav class="navbar navbar-dark default-color">
 
+
+
+                @using (Html.BeginForm("FilterProduct", "Products", FormMethod.Get))
+                {
+                    <select class="form-control-sm" name="filter" onchange="this.form.submit();">
+                        <option selected>Select Filter</option>
+                        <option name="filter" value=2>All</option>
+                        <option name="filter" value=0>Price Low-High </option>
+                        <option name="filter" value=1>Price High-low</option>
+
+                    </select>
+                }
                 <p class="text-danger">@TempData["Error"]</p>
                 <p class="text-danger">@TempData["message"]</p>
-
                 @using (Html.BeginForm("SearchProduct", "Products", FormMethod.Get, new { @class = "form-inline my-2 my-lg-0 ml-auto" }))
                 {
                     <input type="text" name="name" class="form-control" placeholder="Search a Product..." aria-label="Search" />
@@ -21,6 +33,7 @@
                 {
                     <input type="submit" value="Reset" class="btn btn-outline-danger btn-md my-2 my-sm-0 ml-3" />
                 }
+
             </nav>
         </div>
 
@@ -35,10 +48,11 @@
                                  src="@item.PictureUrl" data-holder-rendered="true">
                             <div class="card-body">
                                 <p class="card-text">@item.Description</p>
+                                <p class="card-text">@item.Price</p>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <small class="text-muted">@item.ProductBrand.Name</small>
+                                    <small class="text-muted">@item.ProductBrand</small>
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary mr-3">Buy</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary mr-3">Add to Cart</button>
                                         <button type="button" class="btn btn-sm btn-outline-secondary">Info</button>
                                     </div>
                                 </div>

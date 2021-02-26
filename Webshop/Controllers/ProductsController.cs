@@ -1,6 +1,8 @@
-﻿using Core.Entities.ProductModels;
+﻿using Core.Dtos;
+using Core.Entities.ProductModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -16,18 +18,18 @@ namespace Webshop.Controllers
         // GET: ProductsController
         public async Task<IActionResult> Index()
         {
-            List<Product> productList = new List<Product>();
+            List<ProductToReturnDto> productList = new List<ProductToReturnDto>();
             using (var httpClient = new HttpClient())
             {
                 using (var response = await httpClient.GetAsync("https://localhost:5001/api/products/getallproducts"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    productList = JsonConvert.DeserializeObject<List<Product>>(apiResponse);
+                    productList = JsonConvert.DeserializeObject<List<ProductToReturnDto>>(apiResponse);
                 }
             }
             var sharedMethod = new SharedSpace();
             TempData["types"] = await sharedMethod.FetchProductTypes();
-            TempData["brands"] = await sharedMethod.FetchProducBrands();
+            TempData["brands"] = await sharedMethod.FetchProducBrands();           
             return View(productList);
         }     
 
@@ -38,7 +40,7 @@ namespace Webshop.Controllers
             {
                 return RedirectToAction("Index", "Products");
             }
-            List<Product> productList = new List<Product>();
+            List<ProductToReturnDto> productList = new List<ProductToReturnDto>();
             if (ModelState.IsValid)
             {
                 using (var httpClient = new HttpClient())
@@ -46,7 +48,7 @@ namespace Webshop.Controllers
                     using (var response = await httpClient.GetAsync($"https://localhost:5001/api/products/getproductbyname/{name}"))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();                    
-                        productList = JsonConvert.DeserializeObject<List<Product>>(apiResponse);                        
+                        productList = JsonConvert.DeserializeObject<List<ProductToReturnDto>>(apiResponse);                        
                     }
                 }
                 if (productList.Any(i => i == null))
@@ -72,7 +74,7 @@ namespace Webshop.Controllers
             {
                 return RedirectToAction("Index", "Products");
             }
-            List<Product> productList = new List<Product>();
+            List<ProductToReturnDto> productList = new List<ProductToReturnDto>();
             if (ModelState.IsValid)
             {
                 using (var httpClient = new HttpClient())
@@ -80,7 +82,7 @@ namespace Webshop.Controllers
                     using (var response = await httpClient.GetAsync($"https://localhost:5001/api/products/getproductsbybrand/{brandId}"))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
-                        productList = JsonConvert.DeserializeObject<List<Product>>(apiResponse);
+                        productList = JsonConvert.DeserializeObject<List<ProductToReturnDto>>(apiResponse);
                     }
                 }
                 if (productList.Any(i => i == null))
@@ -107,7 +109,7 @@ namespace Webshop.Controllers
             {
                 return RedirectToAction("Index", "Products");
             }
-            List<Product> productList = new List<Product>();
+            List<ProductToReturnDto> productList = new List<ProductToReturnDto>();
             if (ModelState.IsValid)
             {
                 using (var httpClient = new HttpClient())
@@ -115,7 +117,7 @@ namespace Webshop.Controllers
                     using (var response = await httpClient.GetAsync($"https://localhost:5001/api/products/getproductsbytype/{typeId}"))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
-                        productList = JsonConvert.DeserializeObject<List<Product>>(apiResponse);
+                        productList = JsonConvert.DeserializeObject<List<ProductToReturnDto>>(apiResponse);
                     }
                 }
                 if (productList.Any(i => i == null))
@@ -134,7 +136,23 @@ namespace Webshop.Controllers
             return View("Index", productList);
         }
 
-
+        // GET: ProductsController/SortProductByPrice      
+        public async Task<IActionResult> FilterProduct(int filter)
+        {
+            List<ProductToReturnDto> productList = new List<ProductToReturnDto>();
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync($"https://localhost:5001/api/products/getsortproductbyprice?filter={filter}"))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    productList = JsonConvert.DeserializeObject<List<ProductToReturnDto>>(apiResponse);
+                }
+            }
+            var sharedMethod = new SharedSpace();
+            TempData["types"] = await sharedMethod.FetchProductTypes();
+            TempData["brands"] = await sharedMethod.FetchProducBrands();
+            return View("Index", productList);
+        }        
 
         // GET: ProductsController/Create
         public ActionResult Create()

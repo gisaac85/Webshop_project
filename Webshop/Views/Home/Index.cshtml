@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Core.Entities.ProductModels.Product>
+﻿@model IEnumerable<Core.Dtos.ProductToReturnDto>
 
 @{
     ViewData["Title"] = "Index";
@@ -24,10 +24,10 @@
                 @Html.DisplayNameFor(model => model.PictureUrl)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProductBrand.Name)
+                @Html.DisplayNameFor(model => model.ProductBrand)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProductType.Name)
+                @Html.DisplayNameFor(model => model.ProductType)
             </th>
             <th></th>
         </tr>
@@ -49,10 +49,10 @@
                 @Html.DisplayFor(modelItem => item.PictureUrl)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ProductBrand.Name)
+                @Html.DisplayFor(modelItem => item.ProductBrand)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ProductType.Name)
+                @Html.DisplayFor(modelItem => item.ProductType)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |                
