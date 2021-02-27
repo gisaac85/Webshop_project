@@ -4,7 +4,15 @@
     ViewData["Title"] = "Index";
 }
 
-<p class="p-3 mb-2 text-success">@TempData["msg"]</p>
+@*<p class="p-3 mb-2 text-success">@TempData["msg"]</p>
+<p class="p-3 mb-2 text-success">@TempData["msg"]</p>*@
+
+<div class="text-danger p-2">
+    @TempData["error"]
+</div>
+<div class="text-success p-2">
+    @TempData["msg"]
+</div>
 <p>
     <a asp-action="AddProduct">Create New Product</a>
 </p>
@@ -35,30 +43,31 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PictureUrl)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductBrand)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductType)
-            </td>
-            <td>
-                <a asp-controller="Home" asp-action="EditProduct" asp-route-id="@item.Id">Edit</a> |                
-                <a asp-action="DeleteProduct" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @*@Html.DisplayFor(modelItem => item.Price)*@
+                    @String.Format("{0:c2}", item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PictureUrl)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductBrand)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductType)
+                </td>
+                <td>
+                    <a asp-controller="Home" asp-action="EditProduct" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="DeleteProduct" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>

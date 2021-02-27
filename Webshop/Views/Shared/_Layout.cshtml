@@ -12,7 +12,7 @@
     <header>
         @await Html.PartialAsync("/Views/Shared/_NavBar.cshtml")
     </header>
-        @await Html.PartialAsync("/Views/Shared/_SideBar.cshtml")
+    @await Html.PartialAsync("/Views/Shared/_SideBar.cshtml")
     <div class="container">
         <main role="main" class="pb-3 ml-5">
             @RenderBody()
@@ -27,7 +27,8 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/fontawesome-free-5.15.2-web/js/all.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    @*<script src="~/js/site.js" asp-append-version="true"></script>*@
     @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Styles", required: false)
 </body>
 </html>

@@ -1,0 +1,50 @@
+﻿@using Core.Entities.ProductModels;
+
+@model Core.Dtos.ProductToReturnDto
+
+
+
+<div class="modal-content">
+    <!--Modal Header Start-->
+    <div class="modal-header">
+        <h4 class="modal-title">Product Detail</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <!--Modal Header End-->
+
+
+    <div class="modal-body form-horizontal">
+        <div class="mb-4 box-shadow">
+            @Html.HiddenFor(model => model.Id)
+            <img class="img-modal" data-src="@Model.PictureUrl" alt="Thumbnail [100%x225]"
+                 src="@Model.PictureUrl" data-holder-rendered="true">
+            <div class="card-body">
+                <p class="card-text">@Model.Description</p>
+                @*<p class="card-text">@Model.Price.ToString("C")</p>*@
+                <p class="card-text">@String.Format("{0:c2}", Model.Price)</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">@Model.ProductBrand</small>
+                    @*<div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-secondary mr-3">Add to Cart</button>
+            </div>*@
+
+                    @*<a asp-controller="Home" asp-action="EditProduct" asp-route-id="@item.Id">Edit</a>*@
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Modal Footer Start-->
+    <div class="modal-footer">
+        <button data-dismiss="modal" id="cancel" class="btn btn-default" type="button">Go Back</button>
+        <button class="btn btn-success relative" id="btnSubmit" type="submit">
+            <i class="loader"></i>
+            Add to Cart
+        </button>
+    </div>
+    <!--Modal Footer End-->
+</div>
+
+@*@section Scripts {
+
+}*@
