@@ -10,8 +10,6 @@
         <div class="mb-4">
             <nav class="navbar navbar-dark default-color">
 
-
-
                 @using (Html.BeginForm("FilterProduct", "Products", FormMethod.Get))
                 {
                     <select class="form-control-sm" name="filter" onchange="this.form.submit();">
@@ -19,7 +17,6 @@
                         <option name="filter" value=2>All</option>
                         <option name="filter" value=0>Price Low-High </option>
                         <option name="filter" value=1>Price High-low</option>
-
                     </select>
                 }
 
@@ -55,9 +52,40 @@
                                     <small class="text-muted">@item.ProductBrand</small>
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-sm btn-outline-secondary mr-3">Add to Cart</button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Info</button>
+                                        <a href="#editModal" data-toggle="modal"><i class="btn btn-sm btn-outline-info mr3" data-toggle="tooltip" title="Information">Info</i></a>
+                                        <input type="hidden" class="id" value="@item.Id" />
+
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Edit Modal Html-->
+                    <div id="editModal" class="modal fade">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <form method="post" asp-controller="Products" asp-action="GetProductByProductId">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title w-100 text-center">Product Details</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    </div>
+                                    <div class="modal-body w-100 text-center form-horizontal">
+                                        <div class="mb-4 box-shadow">
+                                            <div class="img-container">
+                                                @Html.HiddenFor(model => item.Id)
+                                                <img class="mx-auto d-block image-size" data-src="@item.PictureUrl" alt="@item.Name"
+                                                     src="@item.PictureUrl" data-holder-rendered="true">
+                                                <div class="card-body">
+                                                    <p class="card-text">@item.Description</p>
+                                                    <p class="card-text">@String.Format("{0:c2}", item.Price)</p>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
