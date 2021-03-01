@@ -33,6 +33,24 @@ namespace Webshop.Controllers
             return View(productList);
         }     
 
+        // GET
+        public async Task<IActionResult> GetProductByProductId(int id)
+        {
+            ProductToReturnDto productList = new ProductToReturnDto();
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync($"https://localhost:5001/api/products/getproduct/{id}"))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    productList = JsonConvert.DeserializeObject<ProductToReturnDto>(apiResponse);
+                }
+            }
+            var sharedMethod = new SharedSpace();
+            TempData["types"] = await sharedMethod.FetchProductTypes();
+            TempData["brands"] = await sharedMethod.FetchProducBrands();
+            return View(productList);
+        }
+
         // GET: ProductsController/SearchProducts/productName      
         public async Task<IActionResult> SearchProduct(string name)
         {
