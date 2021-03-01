@@ -1,20 +1,7 @@
 ﻿@using Core.Entities.ProductModels;
 
-
-@using Microsoft.AspNetCore.Builder
-@using Microsoft.AspNetCore.Localization
-@using Microsoft.Extensions.Options
-
-@inject IOptions<RequestLocalizationOptions> LocOptions
-
-@*@{
-    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
-    var cultureItems = LocOptions.Value.SupportedUICultures
-        .Select(c => new SelectListItem { Value = c.Name, Text = c.DisplayName })
-        .ToList();
-}*@
-
 @model Core.Dtos.ProductToReturnDto
+
 
 
 <div class="card mt-5">

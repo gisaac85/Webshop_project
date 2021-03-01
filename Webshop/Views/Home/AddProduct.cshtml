@@ -1,23 +1,11 @@
-﻿@using Core.Entities.ProductModels;
-
-@using Microsoft.AspNetCore.Builder
-@using Microsoft.AspNetCore.Localization
-@using Microsoft.Extensions.Options
-
-@inject IOptions<RequestLocalizationOptions> LocOptions
-
-@*@{
-    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
-    var cultureItems = LocOptions.Value.SupportedUICultures
-        .Select(c => new SelectListItem { Value = c.Name, Text = c.DisplayName })
-        .ToList();
-}*@
+﻿
+@using Core.Entities.ProductModels;
 
 <div class="card mt-5">
     <div class="card-header h4">
         Add Product
     </div>
-    <div class="card-body"> 
+    <div class="card-body">
         <form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="AddProduct">
             <div class="form-group row">
                 <label for="name" class="col-sm-3 col-form-label">Name</label>
@@ -45,7 +33,7 @@
             </div>
             <div class="form-group row">
                 <label for="ProductBrandId" class="col-sm-3 col-form-label">Product Brand</label>
-                <div class="col-sm-6">
+                <div class="col-sm-6">                   
                     <select name="ProductBrandId" class="form-control form-control-sm" asp-items="ViewBag.productBrandList" required></select>
                 </div>
             </div>

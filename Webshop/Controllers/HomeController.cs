@@ -101,7 +101,7 @@ namespace Webshop.Controllers
                         }
                         else
                         {
-                            TempData["error"] = "Error!!! Product couldn't be added!";
+                            TempData["msg"] = "Error!!! Product couldn't be added!";
                         }
                         
                     }
@@ -173,7 +173,7 @@ namespace Webshop.Controllers
                             }
                             else
                             {
-                                TempData["error"] = "Error!!! Product couldn't be updated!";
+                                TempData["msg"] = "Error!!! Product couldn't be updated!";
                             }
                         }
 
@@ -245,7 +245,7 @@ namespace Webshop.Controllers
                         }
                         else
                         {
-                            TempData["error"] = "Error!!! Product couldn't be deleted!";
+                            TempData["msg"] = "Error!!! Product couldn't be deleted!";
                         }
                     }
                 }
