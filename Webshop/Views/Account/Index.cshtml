@@ -1,0 +1,50 @@
+﻿
+@{
+    Layout = "_LoginLayout";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sign-in/">
+    <link href="/docs/5.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <meta name="theme-color" content="#7952b3">
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }     
+    </style>
+    <title>Login</title>
+</head>
+<body class="text-center" data-new-gr-c-s-check-loaded="14.997.0" data-gr-ext-installed="">
+
+    
+    <main class="form-signin mr-0">
+
+        @using (Html.BeginForm("UserLogin", "Account", FormMethod.Post))
+        {
+            <img class="mb-4 mr-0" src="/images/logo-login.jpg" alt="" height="500" width="500">
+            <p class="text-danger">@TempData["loginMessage"]</p>
+            <div class="m-5">
+                <input type="Email" id="email" name="email" class="form-control-sm" placeholder="Email address" required="" autofocus="">
+            </div>
+            <div class="m-5">
+                <input type="Password" id="inputPassword" name="password" class="form-control-sm" placeholder="Password" required="">
+            </div>
+            <div class="m-5 mb-5 mr-5 ">
+                <button class="btn btn-primary" type="submit">Login</button>
+            </div>
+        }
+    </main>
+    <div>
+        <a asp-controller="Account" asp-action="UserRegister" type="button" class="btn btn-outline-info btn-md btn-rounded waves-effect waves-light">Are You New , Register Now!</a> 
+    </div>
+</body>
+
+</html>
