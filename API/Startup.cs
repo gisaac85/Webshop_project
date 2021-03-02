@@ -9,6 +9,7 @@ using API.Helpers;
 using API.Middleware;
 using API.Extensions;
 using Infrastructure.Identity;
+using StackExchange.Redis;
 
 namespace API
 {
@@ -33,8 +34,13 @@ namespace API
             });
             services.AddDbContext<WebshopDataContext>(options => options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<AppIdentityDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("IdentityConnection")));
+            services.AddSingleton<IConnectionMultiplexer>(c =>
+            {
+                var config = ConfigurationOptions.Parse(Configuration.GetConnectionString("Redis"), true);
+                return ConnectionMultiplexer.Connect(config);
+            });
             services.AddApplicationServices();
-            services.AddIdentityServices(Configuration);
+            services.AddIdentityServices(Configuration);            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
