@@ -27,7 +27,7 @@ namespace Webshop.Controllers
                     productList = JsonConvert.DeserializeObject<List<ProductToReturnDto>>(apiResponse);
                 }
             }
-            var sharedMethod = new SharedSpace();
+            var sharedMethod = new SharedSpace();         
             TempData["types"] = await sharedMethod.FetchProductTypes();
             TempData["brands"] = await sharedMethod.FetchProducBrands();           
             return View(productList);
