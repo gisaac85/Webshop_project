@@ -173,26 +173,6 @@ namespace Webshop.Controllers
         }
 
 
-        [HttpGet]
-        public async Task<IActionResult> Details(int id)
-        {
-            ProductToReturnDto product = new ProductToReturnDto();
-
-            if (ModelState.IsValid)
-            {
-                using (var httpClient = new HttpClient())
-                {
-                    using (var response = await httpClient.GetAsync($"https://localhost:5001/api/products/getproduct/{id}"))
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        product = JsonConvert.DeserializeObject<ProductToReturnDto>(apiResponse);
-                    }
-                }
-            }
-
-            return PartialView("_Details", product);
-        }
-
         // GET: ProductsController/Create
         public ActionResult Create()
         {
