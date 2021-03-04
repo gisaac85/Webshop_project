@@ -43,7 +43,8 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Price)
+                @*@Html.DisplayFor(modelItem => item.Price)*@
+                @String.Format("{0:c2}", item.Price)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PictureUrl)
