@@ -2,73 +2,69 @@
 using Core.Entities.ProductModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Webshop.SharedMethods;
+using Webshop.Shared;
+using Webshop.Shared.Interfaces;
 
 namespace Webshop.Controllers
 {
     public class ProductsController : Controller
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IProductMVCRepository _productMVCRepo;
+
+        public ProductsController(IHttpContextAccessor httpContextAccessor,IProductMVCRepository productMVCRepo)
+        {
+            _httpContextAccessor = httpContextAccessor;
+            _productMVCRepo = productMVCRepo;
+        }
+
+        public async Task<Tuple<object,object>> PublicMethods()
+        {
+            var sharedMethod = new SharedSpace();
+            TempData["types"] = await sharedMethod.FetchProductTypes(); 
+            TempData["brands"] = await sharedMethod.FetchProducBrands(); 
+            return Tuple.Create(TempData["types"], TempData["brands"]);
+        }
+
         // GET: ProductsController
         public async Task<IActionResult> Index()
         {
-            List<ProductToReturnDto> productList = new List<ProductToReturnDto>();
-            using (var httpClient = new HttpClient())
-            {
-                using (var response = await httpClient.GetAsync("https://localhost:5001/api/products/getallproducts"))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    productList = JsonConvert.DeserializeObject<List<ProductToReturnDto>>(apiResponse);
-                }
-            }
-            var sharedMethod = new SharedSpace();         
-            TempData["types"] = await sharedMethod.FetchProductTypes();
-            TempData["brands"] = await sharedMethod.FetchProducBrands();           
+            List<ProductToReturnDto> productList = new List<ProductToReturnDto>();            
+            productList = await _productMVCRepo.GetAllAsync(ApiUri.ProductBaseUri + "getallproducts");
+            await PublicMethods();
             return View(productList);
-        }     
+        }
 
         // GET
         public async Task<IActionResult> GetProductByProductId(int id)
         {
-            ProductToReturnDto productList = new ProductToReturnDto();
-            using (var httpClient = new HttpClient())
-            {
-                using (var response = await httpClient.GetAsync($"https://localhost:5001/api/products/getproduct/{id}"))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    productList = JsonConvert.DeserializeObject<ProductToReturnDto>(apiResponse);
-                }
-            }
-            var sharedMethod = new SharedSpace();
-            TempData["types"] = await sharedMethod.FetchProductTypes();
-            TempData["brands"] = await sharedMethod.FetchProducBrands();
-            return View(productList);
+            ProductToReturnDto product = new ProductToReturnDto();           
+            product = await _productMVCRepo.GetAsync(ApiUri.ProductBaseUri + "getproduct/", id);
+            await PublicMethods();
+            return View(product);
         }
 
         // GET: ProductsController/SearchProducts/productName      
         public async Task<IActionResult> SearchProduct(string name)
         {
+            //CheckAuth();
             if (string.IsNullOrWhiteSpace(name))
             {
                 return RedirectToAction("Index", "Products");
             }
+
             List<ProductToReturnDto> productList = new List<ProductToReturnDto>();
+
             if (ModelState.IsValid)
-            {
-                using (var httpClient = new HttpClient())
-                {
-                    using (var response = await httpClient.GetAsync($"https://localhost:5001/api/products/getproductbyname/{name}"))
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();                    
-                        productList = JsonConvert.DeserializeObject<List<ProductToReturnDto>>(apiResponse);                        
-                    }
-                }
+            {               
+                productList = await _productMVCRepo.GetListByNameAsync(ApiUri.ProductBaseUri + "getproductbyname/", name);
+
                 if (productList.Any(i => i == null))
                 {
                     TempData["Error"] = "Product Not Found";
@@ -79,9 +75,7 @@ namespace Webshop.Controllers
                     TempData["message"] = $"{productList.Count()} products found";
                 }
             }
-            var sharedMethod = new SharedSpace();
-            TempData["types"] = await sharedMethod.FetchProductTypes();
-            TempData["brands"] = await sharedMethod.FetchProducBrands();
+            await PublicMethods();
             return View("Index", productList);
         }
 
@@ -94,15 +88,8 @@ namespace Webshop.Controllers
             }
             List<ProductToReturnDto> productList = new List<ProductToReturnDto>();
             if (ModelState.IsValid)
-            {
-                using (var httpClient = new HttpClient())
-                {
-                    using (var response = await httpClient.GetAsync($"https://localhost:5001/api/products/getproductsbybrand/{brandId}"))
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        productList = JsonConvert.DeserializeObject<List<ProductToReturnDto>>(apiResponse);
-                    }
-                }
+            {              
+                productList = await _productMVCRepo.GetListByIdAsync(ApiUri.ProductBaseUri + "getproductsbybrand/", brandId);
                 if (productList.Any(i => i == null))
                 {
                     TempData["Error"] = "Product Not Found";
@@ -113,9 +100,7 @@ namespace Webshop.Controllers
                     TempData["message"] = $"{productList.Count()} products found";
                 }
             }
-            var sharedMethod = new SharedSpace();
-            TempData["types"] = await sharedMethod.FetchProductTypes();
-            TempData["brands"] = await sharedMethod.FetchProducBrands();
+            await PublicMethods();
             return View("Index", productList);
 
         }
@@ -130,14 +115,7 @@ namespace Webshop.Controllers
             List<ProductToReturnDto> productList = new List<ProductToReturnDto>();
             if (ModelState.IsValid)
             {
-                using (var httpClient = new HttpClient())
-                {
-                    using (var response = await httpClient.GetAsync($"https://localhost:5001/api/products/getproductsbytype/{typeId}"))
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        productList = JsonConvert.DeserializeObject<List<ProductToReturnDto>>(apiResponse);
-                    }
-                }
+                productList = await _productMVCRepo.GetListByIdAsync(ApiUri.ProductBaseUri + "getproductsbytype/", typeId);
                 if (productList.Any(i => i == null))
                 {
                     TempData["Error"] = "Product Not Found";
@@ -148,50 +126,19 @@ namespace Webshop.Controllers
                     TempData["message"] = $"{productList.Count()} products found";
                 }
             }
-            var sharedMethod = new SharedSpace();
-            TempData["types"] = await sharedMethod.FetchProductTypes();
-            TempData["brands"] = await sharedMethod.FetchProducBrands();
+            await PublicMethods();
             return View("Index", productList);
         }
 
         // GET: ProductsController/SortProductByPrice      
         public async Task<IActionResult> FilterProduct(int filter)
         {
-            List<ProductToReturnDto> productList = new List<ProductToReturnDto>();
-            using (var httpClient = new HttpClient())
-            {
-                using (var response = await httpClient.GetAsync($"https://localhost:5001/api/products/getsortproductbyprice?filter={filter}"))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    productList = JsonConvert.DeserializeObject<List<ProductToReturnDto>>(apiResponse);
-                }
-            }
-            var sharedMethod = new SharedSpace();
-            TempData["types"] = await sharedMethod.FetchProductTypes();
-            TempData["brands"] = await sharedMethod.FetchProducBrands();
+            List<ProductToReturnDto> productList = new List<ProductToReturnDto>();           
+            productList = await _productMVCRepo.GetListByIdAsync(ApiUri.ProductBaseUri + "getsortproductbyprice?filter=", filter);
+            await PublicMethods();
             return View("Index", productList);
         }
-
-
-        [HttpGet]
-        public async Task<IActionResult> Details(int id)
-        {
-            ProductToReturnDto product = new ProductToReturnDto();
-
-            if (ModelState.IsValid)
-            {
-                using (var httpClient = new HttpClient())
-                {
-                    using (var response = await httpClient.GetAsync($"https://localhost:5001/api/products/getproduct/{id}"))
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        product = JsonConvert.DeserializeObject<ProductToReturnDto>(apiResponse);
-                    }
-                }
-            }
-
-            return PartialView("_Details", product);
-        }
+       
 
         // GET: ProductsController/Create
         public ActionResult Create()

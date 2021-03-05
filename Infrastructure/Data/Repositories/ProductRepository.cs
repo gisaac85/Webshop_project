@@ -40,7 +40,7 @@ namespace Infrastructure.Data.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<IReadOnlyList<Product>> GetProductByNameAsync(string name)
+        public async Task<List<Product>> GetProductByNameAsync(string name)
         {
             return await _context.Products.Where(x => x.Name.ToLower() == name || x.Name.ToUpper() == name || x.Name == name).Include(x => x.ProductBrand).Include(x => x.ProductType).
                 Select(t => new Product
@@ -61,7 +61,7 @@ namespace Infrastructure.Data.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IReadOnlyList<Product>> GetProductsAsync()
+        public async Task<List<Product>> GetProductsAsync()
         {
             return await _context.Products.Include(p=>p.ProductBrand).Include(p=>p.ProductType).ToListAsync();
         }

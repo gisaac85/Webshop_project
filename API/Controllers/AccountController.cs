@@ -4,6 +4,8 @@ using AutoMapper;
 using Core.Dtos;
 using Core.Entities.UserModels;
 using Core.Interfaces;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +17,9 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
+    
+    [ApiController]
+    [Route("api/[controller]")]
     public class AccountController : BaseApiController
     {
         private readonly UserManager<AppUser> _userManager;
@@ -29,7 +34,7 @@ namespace API.Controllers
             _tokenService = tokenService;
         }
 
-        [Authorize]
+       
         [HttpGet]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
@@ -43,7 +48,7 @@ namespace API.Controllers
             };
         }
 
-        [Authorize]
+        
         [HttpGet("address")]
         public async Task<ActionResult<AddressUserDto>> GetUserAddress()
         {
@@ -52,7 +57,7 @@ namespace API.Controllers
            return _mapper.Map<AddressUser,AddressUserDto>(user.AddressUser);
         }
 
-        [Authorize]
+       
         [HttpPut("address")]
         public async Task<ActionResult<AddressUserDto>> UpdateUserAddress(AddressUserDto address)
         {
@@ -73,7 +78,7 @@ namespace API.Controllers
             return await _userManager.FindByEmailAsync(email) != null;
         }      
 
-
+       
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
@@ -89,7 +94,7 @@ namespace API.Controllers
             if(!result.Succeeded)
             {
                 return Unauthorized(new ApiResponse(401));
-            }
+            }           
 
             return new UserDto
             {
@@ -99,6 +104,7 @@ namespace API.Controllers
             };
         }
 
+      
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {           

@@ -16,6 +16,10 @@
     </nav>*@
 
 <!-- Navbar -->
+@using System.Web;
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor httpContextAcc;
+
 <nav class="navbar navbar-expand navbar-dark bg-dark">
 
     <a class="navbar-brand" asp-controller="Products" asp-action="Index">
@@ -27,7 +31,7 @@
             aria-controls="basicExampleNav1" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-   
+
     <!-- Breadcrumbs -->
     <!-- Links -->
     <div class="collapse navbar-collapse" id="basicExampleNav1">
@@ -39,16 +43,29 @@
                     <span class="badge badge-pill red"> 0</span>
                     <i class="fas fa-shopping-cart fa-1x mr-5 text-light"></i>
                 </a>
-            </li>           
-            <li class="nav-item">               
+            </li>
+            <li class="nav-item">
                 <a class="nav-link waves-effect" asp-area="" asp-controller="Home" asp-action="Index">Administrator Panel</a>
             </li>
             <li class="nav-item">
                 <a href="#!" class="nav-link waves-effect">Contact</a>
             </li>
-            <li class="nav-item">
-                <a asp-controller="Account" asp-action="Index" class="nav-link waves-effect">Login</a>
-            </li>
+            @if (httpContextAcc.HttpContext.Session.GetString("JWToken") != null && httpContextAcc.HttpContext.Session.GetString("JWToken").ToString().Length > 0)
+            {
+                <li class="nav-item">
+                    <a href="#!" class="nav-link waves-effect">Welcome @httpContextAcc.HttpContext.Session.GetString("User")</a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="Account" asp-action="Logout" class="nav-link waves-effect">Logout</a>
+                </li>
+            }
+            else
+            {
+                <li class="nav-item">
+                    <a asp-controller="Account" asp-action="Index" class="nav-link waves-effect">Login</a>
+                </li>
+            }
+
             <li class="nav-item pl-2 mb-2 mb-md-0">
                 <a asp-controller="Account" asp-action="UserRegister" type="button" class="btn btn-outline-info btn-md btn-rounded btn-navbar waves-effect waves-light">Sign up</a>
             </li>

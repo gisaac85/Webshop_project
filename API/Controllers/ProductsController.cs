@@ -25,10 +25,10 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("getallproducts")]
-        public async Task<ActionResult<IReadOnlyList<ProductToReturnDto>>> GetProducts()
+        public async Task<ActionResult<List<ProductToReturnDto>>> GetProducts()
         {
             var products = await _productsRepo.GetProductsAsync();
-            return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products));
+            return Ok(_mapper.Map<List<Product>, List<ProductToReturnDto>>(products));
         }
 
         [HttpGet]
@@ -46,7 +46,7 @@ namespace API.Controllers
         public async Task<ActionResult<Product>> GetProductByName(string name)
         {
             var products = await _productsRepo.GetProductByNameAsync(name);
-            return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products));
+            return Ok(_mapper.Map<List<Product>, List<ProductToReturnDto>>(products));
 
         }
 

@@ -10,6 +10,10 @@ using API.Middleware;
 using API.Extensions;
 using Infrastructure.Identity;
 using StackExchange.Redis;
+using Microsoft.Owin.Security.OAuth;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Threading.Tasks;
 
 namespace API
 {
@@ -40,7 +44,15 @@ namespace API
                 return ConnectionMultiplexer.Connect(config);
             });
             services.AddApplicationServices();
-            services.AddIdentityServices(Configuration);            
+            services.AddIdentityServices(Configuration);
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                });
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,11 +62,13 @@ namespace API
 
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
-            app.UseHsts();          
+           // app.UseHsts();          
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthentication();
 
@@ -63,6 +77,7 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                //endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }

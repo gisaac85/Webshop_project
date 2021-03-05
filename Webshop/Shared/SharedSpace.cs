@@ -8,7 +8,7 @@ using System.Net.Http;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System.Threading.Tasks;
 
-namespace Webshop.SharedMethods
+namespace Webshop.Shared
 {
     public class SharedSpace
     {

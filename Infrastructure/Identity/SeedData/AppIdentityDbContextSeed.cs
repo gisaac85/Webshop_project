@@ -1,5 +1,6 @@
 ﻿using Core.Entities.UserModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,24 @@ namespace Infrastructure.Identity.SeedData
 {
     public class AppIdentityDbContextSeed
     {
-        public static async Task SeedUsersAsync(UserManager<AppUser> userManager)
+       
+        public static async Task SeedUsersAsync(UserManager<AppUser> userManager,RoleManager<IdentityRole> roleManager)
         {
-            if (!userManager.Users.Any())
+            string[] roleNames = { "Admin", "Member" };
+            IdentityResult roleResult;
+
+            foreach (var roleName in roleNames)
             {
+                var roleExist = await roleManager.RoleExistsAsync(roleName);
+                if (!roleExist)
+                {
+                    //create the roles and seed them to the database
+                    roleResult = await roleManager.CreateAsync(new IdentityRole(roleName));
+                }
+            }
+
+            if (!userManager.Users.Any())
+            {              
                 var user = new AppUser
                 {
                     DisplayName = "Isaac",
@@ -31,6 +46,7 @@ namespace Infrastructure.Identity.SeedData
                 };
 
                 await userManager.CreateAsync(user, "P@ssw0rd");
+                await userManager.AddToRoleAsync(user, "Admin");
             }
         }
     }
