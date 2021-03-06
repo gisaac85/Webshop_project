@@ -42,42 +42,25 @@
                 @foreach (var item in Model)
                 {
                     <div class="col-md-4">
-                        <div class="card mb-4 box-shadow">
-
-                            @*<div class="img-container">
-                                <img src="@item.PictureUrl" class="img-custom" data-src="@item.PictureUrl" alt="Thumbnail [100%x225]"
-                                     data-holder-rendered="true">
-
-                                <div class="img-overlay"></div>
-
-                                <div class="btn-group-lg">
-
-                                    <div class="img-button-2 btn">
-                                        <a href="#editModal"
-                                            data-toggle="modal"
-                                            onclick="passUrl(`@item.PictureUrl`)">INFO</a>
-                                        <input type="hidden" class="id" value="@item.Id" />
-                                    </div>
-
-                                    <div class="img-button-1 btn">
-                                        <a href="">ADD TO CART</a>
-                                    </div>
-                                </div>
-
-                            </div>*@
-
-                            @*<div class="col-lg-4 col-md-6 col-sm-8 col-xs-12"></div>*@
+                        <div class="card mb-4 box-shadow">                                                 
                                 <div class="hovereffect">
                                     <img class="img-responsive img-custom" src="@item.PictureUrl" alt="Thumbnail [100%x225]">
                                     <div class="overlay">
                                         <h2>@item.Name</h2>
                                         <a onclick="passUrl(`@item.PictureUrl`)" class="info" href="#editModal" data-toggle="modal">INFO</a>
-                                        <a class="info" href="#">ADD TO CART</a>
+                                        @using (Html.BeginForm("AddToBasket", "Basket", FormMethod.Post))
+                                        {
+                                            <input type="hidden" name="id" value="@item.Id" />
+                                            <input type="hidden" name="Name" value="@item.Name" />
+                                            <input type="hidden" name="Price" value="@item.Price" />                                          
+                                            <input type="hidden" name="PictureUrl" value="@item.PictureUrl" />
+                                            <input type="hidden" name="ProductBrand" value="@item.ProductBrand" />
+                                            <input type="hidden" name="ProductType" value="@item.ProductType" />
+                                            <input type="submit" value="ADD TO CART" class="info" />
+                                        }
+
                                     </div>
-                                </div>
-                            
-
-
+                                </div>                          
                             <div class="card-body">
                                 <p class="card-text">@item.Description</p>
                                 <p class="card-text">@String.Format("{0:c2}", item.Price)</p>
@@ -125,11 +108,6 @@
         </div>
     </div>
 </div>
-
-
-@*@section Styles {
-    <link rel="stylesheet" href="~/css/modal.css" />
-}*@
 
 @section Scripts {
     <script src="~/js/modal.js" asp-append-version="true"></script>

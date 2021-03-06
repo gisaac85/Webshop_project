@@ -95,7 +95,7 @@ namespace Webshop.Controllers
         public IActionResult Logout()
         {
             _httpContextAccessor.HttpContext.Session.SetString("JWToken", "");
-            _httpContextAccessor.HttpContext.Session.Clear();
+           // _httpContextAccessor.HttpContext.Session.Clear();
             return RedirectToAction("Index", "Products", null);
         }
     }

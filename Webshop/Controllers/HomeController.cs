@@ -24,11 +24,13 @@ namespace Webshop.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IWebHostEnvironment _hostEnvironment;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment hostEnvironment)
+        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment hostEnvironment, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _hostEnvironment = hostEnvironment;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IActionResult> Index()
@@ -42,7 +44,7 @@ namespace Webshop.Controllers
                     productList = JsonConvert.DeserializeObject<List<ProductToReturnDto>>(apiResponse);
                 }
             }
-            var sharedMethod = new SharedSpace();
+            var sharedMethod = new SharedSpace(_httpContextAccessor);
             TempData["types"] = await sharedMethod.FetchProductTypes();
             TempData["brands"] = await sharedMethod.FetchProducBrands();
             return View(productList);
@@ -52,7 +54,7 @@ namespace Webshop.Controllers
         public async Task<IActionResult> AddProduct()
         {
             
-            var sharedMethod = new SharedSpace();
+            var sharedMethod = new SharedSpace(_httpContextAccessor);
             TempData["types"] = await sharedMethod.FetchProductTypes();
             TempData["brands"] = await sharedMethod.FetchProducBrands();
 
@@ -140,7 +142,7 @@ namespace Webshop.Controllers
                     TempData["message"] = $"{product} products found";
                 }
             }
-            var sharedMethod = new SharedSpace();
+            var sharedMethod = new SharedSpace(_httpContextAccessor);
             TempData["types"] = await sharedMethod.FetchProductTypes();
             TempData["brands"] = await sharedMethod.FetchProducBrands();
 
@@ -213,7 +215,7 @@ namespace Webshop.Controllers
                     TempData["message"] = $"{product} found";
                 }
             }
-            var sharedMethod = new SharedSpace();
+            var sharedMethod = new SharedSpace(_httpContextAccessor);
             TempData["types"] = await sharedMethod.FetchProductTypes();
             TempData["brands"] = await sharedMethod.FetchProducBrands();
 

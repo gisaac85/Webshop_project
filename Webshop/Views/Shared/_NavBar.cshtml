@@ -40,7 +40,7 @@
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
                 <a asp-controller="Basket" asp-action="Index" class="nav-link navbar-link-2 waves-effect">
-                    <span class="badge badge-pill red"> 0</span>
+                    <span class="badge badge-pill red"> @TempData["basketItems"]</span>
                     <i class="fas fa-shopping-cart fa-1x mr-5 text-light"></i>
                 </a>
             </li>

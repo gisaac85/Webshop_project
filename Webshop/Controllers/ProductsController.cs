@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Webshop.Models.ViewModels;
 using Webshop.Shared;
 using Webshop.Shared.Interfaces;
 
@@ -24,19 +25,21 @@ namespace Webshop.Controllers
             _productMVCRepo = productMVCRepo;
         }
 
-        public async Task<Tuple<object,object>> PublicMethods()
+        public async Task<Tuple<object,object,object>> PublicMethods()
         {
-            var sharedMethod = new SharedSpace();
-            TempData["types"] = await sharedMethod.FetchProductTypes(); 
-            TempData["brands"] = await sharedMethod.FetchProducBrands(); 
-            return Tuple.Create(TempData["types"], TempData["brands"]);
+            var service = new SharedSpace(_httpContextAccessor);
+            TempData["types"] = await service.FetchProductTypes(); 
+            TempData["brands"] = await service.FetchProducBrands();
+            var basketProducts = await service.FetchBasket();
+            TempData["basketItems"] = basketProducts.Items.Count;
+            return Tuple.Create(TempData["types"], TempData["brands"], TempData["basketItems"]);
         }
 
         // GET: ProductsController
         public async Task<IActionResult> Index()
         {
             List<ProductToReturnDto> productList = new List<ProductToReturnDto>();            
-            productList = await _productMVCRepo.GetAllAsync(ApiUri.ProductBaseUri + "getallproducts");
+            productList = await _productMVCRepo.GetAllAsync(ApiUri.ProductBaseUri + "getallproducts");            
             await PublicMethods();
             return View(productList);
         }
