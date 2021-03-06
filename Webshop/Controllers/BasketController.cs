@@ -52,9 +52,9 @@ namespace Webshop.Controllers
             return RedirectToAction("Index", "Products");
         }
 
-        public async Task<IActionResult> RemoveItem(int id)
+        public IActionResult RemoveItem(int id)
         {
-
+            return View();
         }
     }
 }
