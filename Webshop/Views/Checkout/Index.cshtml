@@ -1,0 +1,41 @@
+﻿@{
+    Layout = "_Layout";
+}
+@using Core.Dtos;
+@model Core.Dtos.OrderToReturnDto;
+
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-8">
+
+        </div>
+        <div class="col-4">
+            <div class="row">
+                <div class="bg-light px-4 text-uppercase font-weight-bold" style="padding: 1.20em;">
+                    Order Summary
+                </div>
+                
+                <div class="p-4">
+                    <p class="font-italic mb-4">Shipping costs will be added depending on choices made during checkout</p>
+                    <ul class="list-unstyled mb-4">
+                        <li class="d-flex justify-content-between py-3 border-bottom">
+                            <strong class="text-muted">Order subtotal</strong>                    
+                                                   
+                            <strong>@String.Format("{0:c2}", Model.Subtotal)</strong>
+                        </li>
+                        <li class="d-flex justify-content-between py-3 border-bottom">
+                            <strong class="text-muted">Shipping and handling</strong>
+                            <strong>@String.Format("{0:c2}", Model.ShippingPrice)</strong>
+                        </li>
+                        <li class="d-flex justify-content-between py-3 border-bottom">
+                            <strong class="text-muted">Total</strong>
+                            <strong>@String.Format("{0:c2}", Model.Total)</strong>
+                        </li>
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>

@@ -20,21 +20,19 @@ namespace Webshop.Shared
         CustomerBasket basket = new CustomerBasket();
         CustomerBasket output = new CustomerBasket();
         BasketItem basketItem = new BasketItem();
-        private static string basketID = string.Empty;
-        List<BasketItem> x = new List<BasketItem>();
+        private static string basketID,basketInSession = string.Empty;
+        //List<BasketItem> x = new List<BasketItem>();
 
         public SharedSpace(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
             basketID = _httpContextAccessor.HttpContext.Session.GetString("basketId");
-            var items = _httpContextAccessor.HttpContext.Session.GetString("output");
-
-            if (items != null)
-            {
-                var obj = JsonConvert.DeserializeObject<List<BasketItem>>(items);
-                x = obj;
-            }
-
+            basketInSession = _httpContextAccessor.HttpContext.Session.GetString("output");
+            //if (items != null)
+            //{
+            //    var obj = JsonConvert.DeserializeObject<List<BasketItem>>(items);
+            //    x = obj;
+            //}
         }
 
         public async Task<List<ProductType>> FetchProductTypes()
@@ -76,8 +74,9 @@ namespace Webshop.Shared
                 basketItem.Type = product.ProductType;
                 basketItem.Brand = product.ProductBrand;
                 basketItem.Quantity = 1;
-                
-                basket.Id = "basket1";
+
+                Guid id = Guid.NewGuid(); // create basketID for everysession, we use GUID number 
+                basket.Id = id.ToString(); 
                 basket.Items.Add(basketItem);
 
                 using (var httpClient = new HttpClient())
@@ -111,9 +110,18 @@ namespace Webshop.Shared
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
                         output = JsonConvert.DeserializeObject<CustomerBasket>(apiResponse);
-                        var ss = JsonConvert.DeserializeObject<List<BasketItem>>(_httpContextAccessor.HttpContext.Session.GetString("output"));
-                        output.Items = x;
-                        output.Items.Add(basketItem);
+                        //var ss = JsonConvert.DeserializeObject<List<BasketItem>>(_httpContextAccessor.HttpContext.Session.GetString("output"));
+                        //output.Items = x;
+                        var temp = output.Items.FindIndex(x=>x.Id == basketItem.Id);
+                        if(temp == -1)
+                        {
+                            output.Items.Add(basketItem);
+                        }
+                        else
+                        {
+                            output.Items[temp].Quantity++;
+                        }                                           
+
                         _httpContextAccessor.HttpContext.Session.SetString("output", JsonConvert.SerializeObject(output.Items));
 
                         var myContent = JsonConvert.SerializeObject(output);
@@ -155,8 +163,23 @@ namespace Webshop.Shared
             return basketProducts;
         }
 
-
-    
-    
+        public async Task<CustomerBasket> UpdateBasketMVC(CustomerBasketDto input)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                var myContent = JsonConvert.SerializeObject(input);
+                var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+                var byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/json");
+                using (var response = await httpClient.PostAsync("https://localhost:5001/api/basket/updatebasket", byteContent))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    var result = JsonConvert.DeserializeObject<CustomerBasket>(apiResponse);
+                    _httpContextAccessor.HttpContext.Session.SetString("basketId", result.Id);
+                    _httpContextAccessor.HttpContext.Session.SetString("output", JsonConvert.SerializeObject(result.Items));
+                    return result;
+                }                
+            }            
+        }   
     }
 }

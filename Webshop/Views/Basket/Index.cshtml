@@ -3,6 +3,11 @@
 }
 @using Core.Dtos;
 @model Core.Entities.BasketModels.CustomerBasket;
+@{ 
+    decimal total = 0;
+    decimal subtotal = 0;
+    decimal allTotal = 0;
+}
 <br />
 <p class="lead"><h1>Basket</h1></p>
 <div class="container mt-2">
@@ -35,7 +40,7 @@
                                             <div class="py-2 text-uppercase">Total</div>
                                         </th>
                                         <th scope="col" class="border-0">
-                                            <div class="py-2 text-uppercase">Remove</div>
+                                            <div class="py-2 text-uppercase">&nbsp;&nbsp;&nbsp;&nbsp;Remove</div>
                                         </th>
                                     </tr>
                                 </thead>
@@ -60,21 +65,27 @@
                                             <td class="align-middle"><strong> @String.Format("{0:c2}", item.Price)</strong></td>
                                             <td class="align-middle">
                                                 <div class="d-flex align-items-center">
-                                                    <i class="fa fa-minus-circle text-warning mr-2"
-                                                       style="cursor: pointer; font-size: 2em;"></i>
-                                                    <span class="font-weight-bold" style="font-size: 1.5em;">
-                                                        @item.Quantity
-                                                    </span>
-                                                    <i class="fa fa-plus-circle text-warning mx-2"
-                                                       style="cursor: pointer; font-size: 2em;"></i>
+                                                    <a asp-controller="Basket" asp-action="DecrementItemQuantity" asp-route-id="@item.Id">
+                                                        <i class="fa fa-minus-circle text-warning mr-2"
+                                                           style="cursor: pointer; font-size: 2em;">
+                                                        </i>
+                                                        </a>
+
+                                                        <span class="font-weight-bold" style="font-size: 1.5em;">
+                                                            @item.Quantity
+                                                        </span>
+                                                        <a asp-controller="Basket" asp-action="IncrementItemQuantity" asp-route-id="@item.Id">
+                                                            <i class="fa fa-plus-circle text-warning mx-2"
+                                                               style="cursor: pointer; font-size: 2em;"></i>
+                                                        </a>
                                                 </div>
                                             </td>
                                             <td class="align-middle">
-                                                @{ var total = item.Price * item.Quantity;}
+                                                @{  total = item.Price * item.Quantity;}
                                                 <strong>@String.Format("{0:c2}", total)</strong>
                                             </td>
                                             <td class="align-middle text-center">
-                                                <a class="text-danger"  asp-controller="Basket" asp-action="RemoveItem" asp-route-id="@item.Id">                                                
+                                                <a class="text-danger" asp-controller="Basket" asp-action="RemoveItem" asp-route-id="@item.Id">                                                
                                                     <i class="fa fa-trash" style="font-size: 2em; cursor: pointer;"></i>
                                                 </a>
                                             </td>
@@ -94,14 +105,14 @@
                         <ul class="list-unstyled mb-4">
                             <li class="d-flex justify-content-between py-3 border-bottom">
                                 <strong class="text-muted">Order subtotal</strong>
-                                @{ 
-                                    decimal totalPrice = 0;
+                                @{                                    
                                     foreach (var pro in Model.Items)
                                     {
-                                        totalPrice = totalPrice + pro.Price;
+                                        subtotal = subtotal + pro.Price;
+                                        allTotal = subtotal;
                                     }
                                 }
-                                <strong>@String.Format("{0:c2}", totalPrice)</strong>
+                                <strong>@String.Format("{0:c2}", TempData["total"])</strong>
                             </li>
                             <li class="d-flex justify-content-between py-3 border-bottom">
                                 <strong class="text-muted">Shipping and handling</strong>
@@ -109,7 +120,7 @@
                             </li>
                             <li class="d-flex justify-content-between py-3 border-bottom">
                                 <strong class="text-muted">Total</strong>
-                                <strong>@String.Format("{0:c2}", @totalPrice)</strong>
+                                <strong>@String.Format("{0:c2}", TempData["total"])</strong>
                             </li>
                         </ul>
                     </div>
@@ -118,7 +129,7 @@
         </div>
         <div class="row">
             <div class="col-6 offset-6">
-                <a class="btn btn-outline-primary py-2 btn-block">
+                <a class="btn btn-outline-primary py-2 btn-block" asp-controller="Checkout" asp-action="CheckoutBasket">
                     Proceed to checkout
                 </a>
             </div>

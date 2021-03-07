@@ -10,19 +10,16 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Webshop.Models.ViewModels;
 using Webshop.Shared;
-using Webshop.Shared.Interfaces;
 
 namespace Webshop.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IProductMVCRepository _productMVCRepo;
+        private readonly IHttpContextAccessor _httpContextAccessor;    
 
-        public ProductsController(IHttpContextAccessor httpContextAccessor,IProductMVCRepository productMVCRepo)
+        public ProductsController(IHttpContextAccessor httpContextAccessor)
         {
-            _httpContextAccessor = httpContextAccessor;
-            _productMVCRepo = productMVCRepo;
+            _httpContextAccessor = httpContextAccessor;         
         }
 
         public async Task<Tuple<object,object,object>> PublicMethods()
@@ -38,8 +35,15 @@ namespace Webshop.Controllers
         // GET: ProductsController
         public async Task<IActionResult> Index()
         {
-            List<ProductToReturnDto> productList = new List<ProductToReturnDto>();            
-            productList = await _productMVCRepo.GetAllAsync(ApiUri.ProductBaseUri + "getallproducts");            
+            List<ProductToReturnDto> productList = new List<ProductToReturnDto>();
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync("https://localhost:5001/api/products/getallproducts"))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    productList = JsonConvert.DeserializeObject<List<ProductToReturnDto>>(apiResponse);
+                }
+            }
             await PublicMethods();
             return View(productList);
         }
@@ -47,8 +51,15 @@ namespace Webshop.Controllers
         // GET
         public async Task<IActionResult> GetProductByProductId(int id)
         {
-            ProductToReturnDto product = new ProductToReturnDto();           
-            product = await _productMVCRepo.GetAsync(ApiUri.ProductBaseUri + "getproduct/", id);
+            ProductToReturnDto product = new ProductToReturnDto();
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync($"https://localhost:5001/api/products/getproduct/{id}"))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    product = JsonConvert.DeserializeObject<ProductToReturnDto>(apiResponse);
+                }
+            }
             await PublicMethods();
             return View(product);
         }
@@ -65,8 +76,15 @@ namespace Webshop.Controllers
             List<ProductToReturnDto> productList = new List<ProductToReturnDto>();
 
             if (ModelState.IsValid)
-            {               
-                productList = await _productMVCRepo.GetListByNameAsync(ApiUri.ProductBaseUri + "getproductbyname/", name);
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    using (var response = await httpClient.GetAsync($"https://localhost:5001/api/products/getproductbyname/{name}"))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        productList = JsonConvert.DeserializeObject<List<ProductToReturnDto>>(apiResponse);
+                    }
+                }
 
                 if (productList.Any(i => i == null))
                 {
@@ -91,8 +109,15 @@ namespace Webshop.Controllers
             }
             List<ProductToReturnDto> productList = new List<ProductToReturnDto>();
             if (ModelState.IsValid)
-            {              
-                productList = await _productMVCRepo.GetListByIdAsync(ApiUri.ProductBaseUri + "getproductsbybrand/", brandId);
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    using (var response = await httpClient.GetAsync($"https://localhost:5001/api/products/getproductsbybrand/{brandId}"))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        productList = JsonConvert.DeserializeObject<List<ProductToReturnDto>>(apiResponse);
+                    }
+                }
                 if (productList.Any(i => i == null))
                 {
                     TempData["Error"] = "Product Not Found";
@@ -118,7 +143,14 @@ namespace Webshop.Controllers
             List<ProductToReturnDto> productList = new List<ProductToReturnDto>();
             if (ModelState.IsValid)
             {
-                productList = await _productMVCRepo.GetListByIdAsync(ApiUri.ProductBaseUri + "getproductsbytype/", typeId);
+                using (var httpClient = new HttpClient())
+                {
+                    using (var response = await httpClient.GetAsync($"https://localhost:5001/api/products/getproductsbytype/{typeId}"))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        productList = JsonConvert.DeserializeObject<List<ProductToReturnDto>>(apiResponse);
+                    }
+                }
                 if (productList.Any(i => i == null))
                 {
                     TempData["Error"] = "Product Not Found";
@@ -136,8 +168,15 @@ namespace Webshop.Controllers
         // GET: ProductsController/SortProductByPrice      
         public async Task<IActionResult> FilterProduct(int filter)
         {
-            List<ProductToReturnDto> productList = new List<ProductToReturnDto>();           
-            productList = await _productMVCRepo.GetListByIdAsync(ApiUri.ProductBaseUri + "getsortproductbyprice?filter=", filter);
+            List<ProductToReturnDto> productList = new List<ProductToReturnDto>();
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync($"https://localhost:5001/api/products/getsortproductbyprice?filter={filter}"))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    productList = JsonConvert.DeserializeObject<List<ProductToReturnDto>>(apiResponse);
+                }
+            }
             await PublicMethods();
             return View("Index", productList);
         }

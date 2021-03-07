@@ -4,7 +4,6 @@
 }
 
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,10 +22,8 @@
     <title>Login</title>
 </head>
 <body class="text-center" data-new-gr-c-s-check-loaded="14.997.0" data-gr-ext-installed="">
-
-    
     <main class="form-signin mr-0">
-
+        <p>@TempData["NotLoggedin"]</p>
         @using (Html.BeginForm("UserLogin", "Account", FormMethod.Post))
         {
             <img class="mb-4 mr-0" src="/images/logo-login.jpg" alt="" height="500" width="500">
@@ -42,9 +39,8 @@
             </div>
         }
     </main>
-    <div>
-        <a asp-controller="Account" asp-action="UserRegister" type="button" class="btn btn-outline-info btn-md btn-rounded waves-effect waves-light">Are You New , Register Now!</a> 
-    </div>
+        <div>
+            <a asp-controller="Account" asp-action="UserRegister" type="button" class="btn btn-outline-info btn-md btn-rounded waves-effect waves-light">Are You New , Register Now!</a>
+        </div>
 </body>
-
 </html>

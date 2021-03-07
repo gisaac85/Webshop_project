@@ -2,6 +2,7 @@
 using API.Errors;
 using Core.Interfaces;
 using Infrastructure.Data.Repositories;
+using Infrastructure.Data.Services;
 using Infrastructure.Identity.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,10 +12,13 @@ namespace API.Extensions
     public static class ApplicationServicesExtensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
-        {                      
+        {            
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IDeliveryRepository, DeliveryRepository>();
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = actionContext =>

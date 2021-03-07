@@ -1,4 +1,5 @@
-﻿using Core.Dtos;
+﻿using AutoMapper;
+using Core.Dtos;
 using Core.Entities.BasketModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,23 +16,30 @@ namespace Webshop.Controllers
 {
     public class BasketController : Controller
     {
-        private static int countBasket = 0;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IMapper _mapper;
 
-        public BasketController(IHttpContextAccessor httpContextAccessor)
+        public BasketController(IHttpContextAccessor httpContextAccessor, IMapper mapper)
         {
 
             _httpContextAccessor = httpContextAccessor;
+            _mapper = mapper;
         }
 
-        public async Task<Tuple<object, object, object>> PublicMethods()
+        public async Task<Tuple<object, object, object,object>> PublicMethods()
         {
             var service = new SharedSpace(_httpContextAccessor);
             TempData["types"] = await service.FetchProductTypes();
             TempData["brands"] = await service.FetchProducBrands();
             var basketProducts = await service.FetchBasket();
             TempData["basketItems"] = basketProducts.Items.Count;
-            return Tuple.Create(TempData["types"], TempData["brands"], TempData["basketItems"]);
+            decimal total = 0;
+            foreach (var pro in basketProducts.Items)
+            {
+                total = total + (pro.Price * pro.Quantity);
+                TempData["total"] = total;
+            }
+            return Tuple.Create(TempData["types"], TempData["brands"], TempData["basketItems"], TempData["total"]);
         }
 
 
@@ -39,11 +47,9 @@ namespace Webshop.Controllers
         {
             var service = new SharedSpace(_httpContextAccessor);
             var result = await service.FetchBasket();
-            await PublicMethods();
+            await PublicMethods();           
             return View(result);
         }
-
-
 
         public async Task<IActionResult> AddToBasket(ProductToReturnDto product)
         {         
@@ -52,9 +58,47 @@ namespace Webshop.Controllers
             return RedirectToAction("Index", "Products");
         }
 
-        public IActionResult RemoveItem(int id)
+        public async Task<IActionResult> RemoveItem(int id)
         {
-            return View();
+            var service = new SharedSpace(_httpContextAccessor);
+            var result = await service.FetchBasket();
+            var item = result.Items.Where(x => x.Id == id).FirstOrDefault();
+            result.Items.Remove(item);
+            var customerBasket = _mapper.Map<CustomerBasket, CustomerBasketDto>(result);
+            await service.UpdateBasketMVC(customerBasket);
+            await PublicMethods();            
+            return View("Index",result);
+        }
+
+        public async Task<IActionResult> IncrementItemQuantity(int id)
+        {
+            var service = new SharedSpace(_httpContextAccessor);
+            var result = await service.FetchBasket();
+            var item = result.Items.FindIndex(x => x.Id == id);
+            result.Items[item].Quantity++;
+            var customerBasket = _mapper.Map<CustomerBasket, CustomerBasketDto>(result);
+            await service.UpdateBasketMVC(customerBasket);
+            await PublicMethods();           
+            return View("Index",result);
+        }
+
+        public async Task<IActionResult> DecrementItemQuantity(int id)
+        {
+            var service = new SharedSpace(_httpContextAccessor);
+            var result = await service.FetchBasket();
+            var item = result.Items.FindIndex(x => x.Id == id);
+            if (result.Items[item].Quantity > 1)
+            {
+                result.Items[item].Quantity--;
+                var customerBasket = _mapper.Map<CustomerBasket, CustomerBasketDto>(result);
+                await service.UpdateBasketMVC(customerBasket);
+                await PublicMethods();              
+                return View("Index", result);
+            }
+            else
+            {
+               return await RemoveItem(id);              
+            }           
         }
     }
 }

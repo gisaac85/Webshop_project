@@ -1,3 +1,4 @@
+using API.Helpers;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -12,8 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Webshop.Shared.Implementations;
-using Webshop.Shared.Interfaces;
 
 namespace Webshop
 {
@@ -29,7 +28,7 @@ namespace Webshop
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IProductMVCRepository, ProductMVCRepository>();
+            services.AddAutoMapper(typeof(MappingProfiles));           
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddHttpClient();
