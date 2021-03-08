@@ -44,20 +44,23 @@
                     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">                                                 
                                 <div class="hovereffect">
-                                    <img class="img-responsive img-custom" src="@item.PictureUrl" alt="Thumbnail [100%x225]">
+                                    <div id="imgs">
+                                        <img class="img-responsive img-custom" src="@item.PictureUrl" alt="Thumbnail [100%x225]">
+                                    </div>
                                     <div class="overlay">
                                         <h2>@item.Name</h2>
-                                        <a onclick="passUrl(`@item.PictureUrl`)" class="info" href="#editModal" data-toggle="modal">INFO</a>
-                                        @using (Html.BeginForm("AddToBasket", "Basket", FormMethod.Post))
+                                        <a asp- onclick="passUrl(`@item.PictureUrl`)" class="info" href="#editModal" data-toggle="modal">INFO</a>
+                                                                                
+                                        @using (Html.BeginForm("AddToBasket", "Basket", FormMethod.Post, new {@class = "info" }))
                                         {
                                             <input type="hidden" name="id" value="@item.Id" />
                                             <input type="hidden" name="Name" value="@item.Name" />
-                                            <input type="hidden" name="Price" value="@item.Price" />                                          
+                                            <input type="hidden" name="Price" value="@item.Price" />
                                             <input type="hidden" name="PictureUrl" value="@item.PictureUrl" />
                                             <input type="hidden" name="ProductBrand" value="@item.ProductBrand" />
                                             <input type="hidden" name="ProductType" value="@item.ProductType" />
-                                            <input type="submit" value="ADD TO CART" class="info" />
-                                        }
+                                            <input type="submit" class="add-to-cart" value="ADD TO CART"  />                                                
+                                        }  
                                     </div>
                                 </div>                          
                             <div class="card-body">
@@ -111,3 +114,7 @@
 @section Scripts {
     <script src="~/js/modal.js" asp-append-version="true"></script>
 }
+
+@*@section Styles {
+    <link rel="stylesheet" href="~/css/modal.css" />
+}*@

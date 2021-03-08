@@ -19,7 +19,7 @@
     "Name": "SOFT TRAINERS",
     "Description": "Zara trainers",
     "Price": 90,
-    "PictureUrl": "https://localhost:44325/images/products/image004.webp",
+    "PictureUrl": "https://localhost:44325/images/products/image004.jpg",
     "ProductTypeId": 1,
     "ProductBrandId": 1
   },
@@ -27,7 +27,7 @@
     "Name": "Sneakers",
     "Description": "Mesh Sneakers",
     "Price": 50,
-    "PictureUrl": "https://localhost:44325/images/products/image003.jfif",
+    "PictureUrl": "https://localhost:44325/images/products/image003.jpg",
     "ProductTypeId": 1,
     "ProductBrandId": 4
   },
@@ -43,7 +43,7 @@
     "Name": "KARL KANI",
     "Description": "Signature Bucket Hat",
     "Price": 4,
-    "PictureUrl": "https://localhost:44325/images/products/image001.webp",
+    "PictureUrl": "https://localhost:44325/images/products/image001.jpg",
     "ProductTypeId": 2,
     "ProductBrandId": 4
   },
@@ -59,7 +59,55 @@
     "Name": "Black Lace Boat",
     "Description": "Black lace boat coarse sole",
     "Price": 7,
-    "PictureUrl": "https://localhost:44325/images/products/image008.webp",
+    "PictureUrl": "https://localhost:44325/images/products/image008.jpg",
+    "ProductTypeId": 3,
+    "ProductBrandId": 1
+  },
+  {
+    "Name": "Black Lace Boat",
+    "Description": "Black lace boat coarse sole",
+    "Price": 7,
+    "PictureUrl": "https://localhost:44325/images/products/image009.jpg",
+    "ProductTypeId": 3,
+    "ProductBrandId": 1
+  },
+  {
+    "Name": "Black Lace Boat",
+    "Description": "Black lace boat coarse sole",
+    "Price": 7,
+    "PictureUrl": "https://localhost:44325/images/products/image010.jpg",
+    "ProductTypeId": 3,
+    "ProductBrandId": 1
+  },
+  {
+    "Name": "Black Lace Boat",
+    "Description": "Black lace boat coarse sole",
+    "Price": 7,
+    "PictureUrl": "https://localhost:44325/images/products/image011.jpg",
+    "ProductTypeId": 3,
+    "ProductBrandId": 1
+  },
+  {
+    "Name": "Black Lace Boat",
+    "Description": "Black lace boat coarse sole",
+    "Price": 7,
+    "PictureUrl": "https://localhost:44325/images/products/image012.jpg",
+    "ProductTypeId": 3,
+    "ProductBrandId": 1
+  },
+  {
+    "Name": "Black Lace Boat",
+    "Description": "Black lace boat coarse sole",
+    "Price": 7,
+    "PictureUrl": "https://localhost:44325/images/products/image013.jpg",
+    "ProductTypeId": 3,
+    "ProductBrandId": 1
+  },
+  {
+    "Name": "Black Lace Boat",
+    "Description": "Black lace boat coarse sole",
+    "Price": 7,
+    "PictureUrl": "https://localhost:44325/images/products/image014.jpg",
     "ProductTypeId": 3,
     "ProductBrandId": 1
   }
