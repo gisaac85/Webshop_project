@@ -30,7 +30,14 @@ namespace Core.Entities.OrderModels
 
         public decimal GetTotal()
         {
-            return Subtotal + DeliveryMethod.Price;
+            if (DeliveryMethod != null)
+            {
+                return Subtotal + DeliveryMethod.Price;
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }

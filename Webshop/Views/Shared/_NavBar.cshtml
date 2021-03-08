@@ -46,58 +46,34 @@
                     <i class="fas fa-shopping-cart fa-1x mr-5 text-light"></i>
                 </a>
             </li>
-
+            @if ((string)TempData["role"] == "Admin")
+            {
+            <li class="nav-item">
+                <a class="nav-link waves-effect" asp-area="" asp-controller="Home" asp-action="Index">Administrator Panel</a>
+            </li>
+            }
             <li class="nav-item">
                 <a href="#!" class="nav-link waves-effect">Contact</a>
             </li>
             @if (httpContextAcc.HttpContext.Session.GetString("JWToken") != null && httpContextAcc.HttpContext.Session.GetString("JWToken").ToString().Length > 0)
             {
-                @if (true)
-                {
-                    <li class="nav-item">
-                        <a class="nav-link waves-effect" asp-area="" asp-controller="Home" asp-action="Index">Administrator Panel</a>
-                    </li>
-                }
-
-                <li class="nav-item dropdown bg-dark">
-                    <a class="nav-link dropdown-toggle waves-effect" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Welcome @httpContextAcc.HttpContext.Session.GetString("User")
-                    </a>
-
-                    <div class="dropdown-menu bg-dark drpdwn-mn" aria-labelledby="navbarDropdown">
-                        <a asp-controller="Basket" asp-action="Index" class="dropdown-item nav-link drpdwn-tm">
-                            <i class="fas fa-shopping-cart fa-1x mr-3 text-light"></i>
-                            View Basket
-                        </a>
-                        <a asp-controller="Orders" asp-action="Index" class="dropdown-item  nav-link drpdwn-tm">
-                            <i class="fas fa-history fa-1x mr-3 text-light"></i>
-                            View Orders
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a asp-controller="Account" asp-action="Logout" class="dropdown-item nav-link drpdwn-tm">
-                            <i class="fas fa-sign-out-alt fa-1x mr-3 text-light"></i>
-                            Logout
-                        </a>
-                    </div>
+                <li class="nav-item">
+                    <a href="#!" class="nav-link waves-effect">Welcome @TempData["role"]: @httpContextAcc.HttpContext.Session.GetString("User") </a>
                 </li>
-
-                @*<li class="nav-item">
-                        <a href="#!" class="nav-link waves-effect">Welcome @httpContextAcc.HttpContext.Session.GetString("User")</a>
-                    </li>
-                    <li class="nav-item">
-                        <a asp-controller="Account" asp-action="Logout" class="nav-link waves-effect">Logout</a>
-                    </li>*@
+                <li class="nav-item">
+                    <a asp-controller="Account" asp-action="Logout" class="nav-link waves-effect">Logout</a>
+                </li>
             }
             else
             {
                 <li class="nav-item">
                     <a asp-controller="Account" asp-action="Index" class="nav-link waves-effect">Login</a>
                 </li>
-
                 <li class="nav-item pl-2 mb-2 mb-md-0">
                     <a asp-controller="Account" asp-action="UserRegister" type="button" class="btn btn-outline-info btn-md btn-rounded btn-navbar waves-effect waves-light">Sign up</a>
                 </li>
             }
+
 
         </ul>
 
