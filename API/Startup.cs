@@ -10,10 +10,6 @@ using API.Middleware;
 using API.Extensions;
 using Infrastructure.Identity;
 using StackExchange.Redis;
-using Microsoft.Owin.Security.OAuth;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using System.Threading.Tasks;
 
 namespace API
 {

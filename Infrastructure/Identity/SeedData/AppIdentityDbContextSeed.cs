@@ -44,9 +44,26 @@ namespace Infrastructure.Identity.SeedData
                         Zipcode = "1445GN"
                     }
                 };
+                var user1 = new AppUser
+                {
+                    DisplayName = "Ahmet",
+                    Email = "ahmet@webshop.nl",
+                    UserName = "ahmet@webshop.nl",
+                    AddressUser = new AddressUser
+                    {
+                        FirstName = "Ahmet",
+                        LastName = "Bibi",
+                        Street = "EuropaLaan 112",
+                        City = "Eindhoven",
+                        State = "Noord Brabant",
+                        Zipcode = "1440NN"
+                    }
+                };
 
                 await userManager.CreateAsync(user, "P@ssw0rd");
                 await userManager.AddToRoleAsync(user, "Admin");
+                await userManager.CreateAsync(user1, "P@ssw0rd");
+                await userManager.AddToRoleAsync(user1, "Admin");
             }
         }
     }

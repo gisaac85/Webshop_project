@@ -68,7 +68,7 @@
     "Description": "Black lace boat coarse sole",
     "Price": 7,
     "PictureUrl": "https://localhost:44325/images/products/image009.jpg",
-    "ProductTypeId": 3,
+    "ProductTypeId": 4,
     "ProductBrandId": 1
   },
   {
@@ -76,7 +76,7 @@
     "Description": "Black lace boat coarse sole",
     "Price": 7,
     "PictureUrl": "https://localhost:44325/images/products/image010.jpg",
-    "ProductTypeId": 3,
+    "ProductTypeId": 6,
     "ProductBrandId": 1
   },
   {
@@ -84,7 +84,7 @@
     "Description": "Black lace boat coarse sole",
     "Price": 7,
     "PictureUrl": "https://localhost:44325/images/products/image011.jpg",
-    "ProductTypeId": 3,
+    "ProductTypeId": 5,
     "ProductBrandId": 1
   },
   {
@@ -92,7 +92,7 @@
     "Description": "Black lace boat coarse sole",
     "Price": 7,
     "PictureUrl": "https://localhost:44325/images/products/image012.jpg",
-    "ProductTypeId": 3,
+    "ProductTypeId": 6,
     "ProductBrandId": 1
   },
   {
@@ -100,7 +100,7 @@
     "Description": "Black lace boat coarse sole",
     "Price": 7,
     "PictureUrl": "https://localhost:44325/images/products/image013.jpg",
-    "ProductTypeId": 3,
+    "ProductTypeId": 6,
     "ProductBrandId": 1
   },
   {
@@ -108,7 +108,7 @@
     "Description": "Black lace boat coarse sole",
     "Price": 7,
     "PictureUrl": "https://localhost:44325/images/products/image014.jpg",
-    "ProductTypeId": 3,
+    "ProductTypeId": 5,
     "ProductBrandId": 1
   }
 
