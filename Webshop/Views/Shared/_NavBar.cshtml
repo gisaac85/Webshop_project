@@ -48,21 +48,38 @@
             </li>
             @if ((string)TempData["role"] == "Admin")
             {
-            <li class="nav-item">
-                <a class="nav-link waves-effect" asp-area="" asp-controller="Home" asp-action="Index">Administrator Panel</a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link waves-effect" asp-area="" asp-controller="Home" asp-action="Index">Administrator Panel</a>
+                </li>
             }
             <li class="nav-item">
                 <a href="#!" class="nav-link waves-effect">Contact</a>
             </li>
             @if (httpContextAcc.HttpContext.Session.GetString("JWToken") != null && httpContextAcc.HttpContext.Session.GetString("JWToken").ToString().Length > 0)
             {
-                <li class="nav-item">
-                    <a href="#!" class="nav-link waves-effect">Welcome @TempData["role"]: @httpContextAcc.HttpContext.Session.GetString("User") </a>
+                <li class="nav-item dropdown">
+            
+                    <a href="#!"  id="navbarDropdown" class="nav-link dropdown-toggle waves-effect"  role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Welcome @httpContextAcc.HttpContext.Session.GetString("User") 
+                    </a>
+
+                    <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item nav-link drpdwn-item" asp-controller="Basket" asp-action="Index">
+                            <i class="fas fa-shopping-cart fa-1x mr-3"></i>
+                            View Basket
+                        </a>
+                        <a class="dropdown-item nav-link drpdwn-item" asp-controller="Order" asp-action="Index">
+                            <i class="fas fa-history fa-1x mr-3"></i>
+                            View Orders
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item nav-link drpdwn-item" asp-controller="Account" asp-action="Logout">
+                            <i class="fas fa-sign-out-alt fa-1x mr-3"></i>
+                            Logout
+                        </a>
+                    </div>
                 </li>
-                <li class="nav-item">
-                    <a asp-controller="Account" asp-action="Logout" class="nav-link waves-effect">Logout</a>
-                </li>
+
             }
             else
             {
