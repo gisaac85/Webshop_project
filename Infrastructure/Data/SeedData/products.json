@@ -64,48 +64,48 @@
     "ProductBrandId": 1
   },
   {
-    "Name": "Black Lace Boat",
-    "Description": "Black lace boat coarse sole",
+    "Name": "Black Gloves",
+    "Description": "Black Gloves",
     "Price": 7,
     "PictureUrl": "https://localhost:44325/images/products/image009.jpg",
     "ProductTypeId": 4,
     "ProductBrandId": 1
   },
   {
-    "Name": "Black Lace Boat",
-    "Description": "Black lace boat coarse sole",
+    "Name": "Black Rainy Jacket",
+    "Description": "Black Rainy Jackete",
     "Price": 7,
     "PictureUrl": "https://localhost:44325/images/products/image010.jpg",
     "ProductTypeId": 6,
     "ProductBrandId": 1
   },
   {
-    "Name": "Black Lace Boat",
-    "Description": "Black lace boat coarse sole",
+    "Name": "Blue Pants",
+    "Description": "Blue Pants",
     "Price": 7,
     "PictureUrl": "https://localhost:44325/images/products/image011.jpg",
     "ProductTypeId": 5,
     "ProductBrandId": 1
   },
   {
-    "Name": "Black Lace Boat",
-    "Description": "Black lace boat coarse sole",
+    "Name": "Oliy Winter Jacket",
+    "Description": "Oliy Winter Jacket",
     "Price": 7,
     "PictureUrl": "https://localhost:44325/images/products/image012.jpg",
     "ProductTypeId": 6,
     "ProductBrandId": 1
   },
   {
-    "Name": "Black Lace Boat",
-    "Description": "Black lace boat coarse sole",
+    "Name": "Short Springy Jacket",
+    "Description": "Short Springy Jacket",
     "Price": 7,
     "PictureUrl": "https://localhost:44325/images/products/image013.jpg",
     "ProductTypeId": 6,
     "ProductBrandId": 1
   },
   {
-    "Name": "Black Lace Boat",
-    "Description": "Black lace boat coarse sole",
+    "Name": "Black Sporty Pants",
+    "Description": "Black Sporty Pants",
     "Price": 7,
     "PictureUrl": "https://localhost:44325/images/products/image014.jpg",
     "ProductTypeId": 5,
