@@ -146,6 +146,27 @@ namespace Webshop.Shared
             }
         }
 
+        public async Task<string> FetchUserRole()
+        {
+            var userToken = _httpContextAccessor.HttpContext.Session.GetString("JWToken");
+            var user = new UserDto();
+            if (userToken != "" && userToken != null)
+            {               
+                using (var httpClient = new HttpClient())
+                {
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userToken);
+                    using (var response = await httpClient.GetAsync("https://localhost:5001/api/account/getuser"))
+                    {                       
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        user = JsonConvert.DeserializeObject<UserDto>(apiResponse);
+                    }
+                }
+                return user.Role;
+            }
+            return "";
+        }
+
+
         public async Task<CustomerBasket> FetchBasket()
         {
             CustomerBasket basketProducts = new CustomerBasket();

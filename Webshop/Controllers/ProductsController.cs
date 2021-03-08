@@ -22,14 +22,15 @@ namespace Webshop.Controllers
             _httpContextAccessor = httpContextAccessor;         
         }
 
-        public async Task<Tuple<object,object,object>> PublicMethods()
+        public async Task<Tuple<object,object,object,object>> PublicMethods()
         {
             var service = new SharedSpace(_httpContextAccessor);
             TempData["types"] = await service.FetchProductTypes(); 
             TempData["brands"] = await service.FetchProducBrands();
             var basketProducts = await service.FetchBasket();
             TempData["basketItems"] = basketProducts.Items.Count;
-            return Tuple.Create(TempData["types"], TempData["brands"], TempData["basketItems"]);
+            TempData["role"] = await service.FetchUserRole();
+            return Tuple.Create(TempData["types"], TempData["brands"], TempData["basketItems"], TempData["role"]);
         }
 
         // GET: ProductsController

@@ -35,16 +35,17 @@ namespace API.Controllers
         }
 
        
-        [HttpGet]
+        [HttpGet("getuser")]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
             var user = await _userManager.FindByEmailFromClaimsPrinciple(HttpContext.User);
-
+            var role = await _userManager.GetRolesAsync(user);
             return new UserDto
             {
                 Email = user.Email,
                 Token = _tokenService.CreateToken(user),
-                DisplayName = user.DisplayName
+                DisplayName = user.DisplayName    ,
+                Role = role.FirstOrDefault()
             };
         }
 
@@ -94,13 +95,14 @@ namespace API.Controllers
             if(!result.Succeeded)
             {
                 return Unauthorized(new ApiResponse(401));
-            }           
-
+            }
+            var role = await _userManager.GetRolesAsync(user);
             return new UserDto
             {
                 Email = loginDto.Email,
                 Token = _tokenService.CreateToken(user),
-                DisplayName = user.DisplayName
+                DisplayName = user.DisplayName,
+                Role = role.FirstOrDefault()
             };
         }
 
@@ -112,10 +114,11 @@ namespace API.Controllers
             {
                 DisplayName = registerDto.DisplayName,
                 Email = registerDto.Email,
-                UserName = registerDto.Email
+                UserName = registerDto.Email                
             };
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
+            await _userManager.AddToRoleAsync(user, "Member");
 
             if (!result.Succeeded) return BadRequest(new ApiResponse(400));
 
@@ -123,7 +126,7 @@ namespace API.Controllers
             {
                 DisplayName = user.DisplayName,
                 Token = _tokenService.CreateToken(user),
-                Email = user.Email
+                Email = user.Email             
             };
         }
 

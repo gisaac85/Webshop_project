@@ -54,7 +54,7 @@ namespace Webshop.Controllers
                     {
                         _httpContextAccessor.HttpContext.Session.SetString("JWToken", result.Token);
                         _httpContextAccessor.HttpContext.Session.SetString("User", result.DisplayName);
-                       
+                        _httpContextAccessor.HttpContext.Session.SetString("Role", result.Role);
                         return RedirectToAction("Index", "Products", null);
                     }
                     else
