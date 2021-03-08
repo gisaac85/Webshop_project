@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Postman", "Postman", "{B19823F7-8BA2-4684-8950-CDD58F344A45}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\..\..\Webshop API.postman_collection.json = ..\..\..\..\Webshop API.postman_collection.json
+		..\..\..\..\Webshop.postman_collection.json = ..\..\..\..\Webshop.postman_collection.json
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Webshop", "Webshop\Webshop.csproj", "{3D3870A2-4048-47D9-9E21-46A01BC51B7D}"
