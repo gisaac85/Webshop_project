@@ -60,7 +60,7 @@ namespace API.Controllers
         }
 
        
-        [HttpPut("address")]
+        [HttpPost("updateaddress")]
         public async Task<ActionResult<AddressUserDto>> UpdateUserAddress(AddressUserDto address)
         {
             var user = await _userManager.FindByUserByClaimsPrincipleWithAddressAsync(HttpContext.User);

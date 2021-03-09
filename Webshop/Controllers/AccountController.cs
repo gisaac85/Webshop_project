@@ -70,6 +70,51 @@ namespace Webshop.Controllers
             return View("Profile",address);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> UpdateAddress(AddressUserDto model)
+        {
+            var result = new AddressUserDto();
+            try
+            {
+                var token = _httpContextAccessor.HttpContext.Session.GetString("JWToken");
+
+                if (token == null || token == "")
+                {
+                    TempData["NotLoggedin"] = "You must loggedIn ...";
+                    return RedirectToAction("Index", "Account");
+                }
+
+                using (var httpClient = new HttpClient())
+                {
+                    var myContent = JsonConvert.SerializeObject(model);
+                    var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+                    var byteContent = new ByteArrayContent(buffer);
+                    byteContent.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/json");
+
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                    using (var response = await httpClient.PostAsync($"https://localhost:5001/api/account/updateaddress", byteContent))
+                    {
+                        if (response.IsSuccessStatusCode)
+                        {
+                            TempData["message"] = "Address updated succesfully!";
+                            string apiResponse = await response.Content.ReadAsStringAsync();
+                            result = JsonConvert.DeserializeObject<AddressUserDto>(apiResponse);
+                        }
+                        else
+                        {
+                            TempData["error"] = "Error!!! Address did not be updated!";
+                        }
+                    }
+                }
+
+                return RedirectToAction(nameof(Profile));
+            }
+            catch (Exception)
+            {
+                return View();
+            }
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> UserLogin(LoginDto login)
