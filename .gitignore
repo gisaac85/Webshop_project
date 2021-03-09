@@ -339,3 +339,5 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 /Core/Entities/ProductType.cs
+/API/identity.db-wal
+/API/identity.db-shm
