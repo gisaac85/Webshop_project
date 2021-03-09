@@ -23,6 +23,17 @@ namespace Webshop.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        public async Task<Tuple<object, object, object, object>> PublicMethods()
+        {
+            var service = new SharedSpace(_httpContextAccessor);
+            TempData["types"] = await service.FetchProductTypes();
+            TempData["brands"] = await service.FetchProducBrands();
+            var basketProducts = await service.FetchBasket();
+            TempData["basketItems"] = basketProducts.Items.Count;
+            TempData["role"] = await service.FetchUserRole();
+            return Tuple.Create(TempData["types"], TempData["brands"], TempData["basketItems"], TempData["role"]);
+        }
+
         public IActionResult Index()
         {
             return View("Index");
@@ -31,6 +42,32 @@ namespace Webshop.Controllers
         public IActionResult UserRegister()
         {
             return View("UserRegister");
+        }
+
+        public async Task<IActionResult> Profile()
+        {
+            var token = _httpContextAccessor.HttpContext.Session.GetString("JWToken");
+        
+            if (token == null || token == "")
+            {
+                TempData["NotLoggedin"] = "You must loggedIn ...";
+                return RedirectToAction("Index", "Account");
+            }
+
+            OrderDto model = new OrderDto();
+            AddressUserDto address = new AddressUserDto();           
+
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                using (var response = await httpClient.GetAsync("https://localhost:5001/api/account/address"))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    address = JsonConvert.DeserializeObject<AddressUserDto>(apiResponse);
+                }
+            }
+            await PublicMethods();
+            return View("Profile",address);
         }
 
 
