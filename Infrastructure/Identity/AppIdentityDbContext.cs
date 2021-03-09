@@ -17,7 +17,7 @@ namespace Infrastructure.Identity
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder);
+            base.OnModelCreating(builder);                
         }
     }
 }

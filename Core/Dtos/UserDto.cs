@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Entities.UserModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,5 +13,6 @@ namespace Core.Dtos
         public string DisplayName { get; set; }
         public string Token { get; set; }
         public string Role { get; set; }
+        public AddressUserDto Address { get; set; }
     }
 }

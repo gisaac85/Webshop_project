@@ -44,8 +44,8 @@ namespace API.Controllers
             {
                 Email = user.Email,
                 Token = _tokenService.CreateToken(user),
-                DisplayName = user.DisplayName    ,
-                Role = role.FirstOrDefault()
+                DisplayName = user.DisplayName,
+                Role = role.FirstOrDefault()                
             };
         }
 
@@ -55,7 +55,8 @@ namespace API.Controllers
         {
             var user = await _userManager.FindByUserByClaimsPrincipleWithAddressAsync(HttpContext.User);
 
-           return _mapper.Map<AddressUser,AddressUserDto>(user.AddressUser);
+            var address = _mapper.Map<AddressUser,AddressUserDto>(user.AddressUser);
+            return address;
         }
 
        
@@ -83,26 +84,31 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
-            var user = await _userManager.FindByEmailAsync(loginDto.Email);
-
-            if(user == null)
+            var user = await _userManager.FindByEmailAsync(loginDto.Email);                        
+            
+            if (user == null)
             {
                 return Unauthorized(new ApiResponse(401));
-            }
+            }          
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password,false);
 
-            if(!result.Succeeded)
+            var address = await _userManager.FindAddressAsync(user.Id);
+            var addressDto = _mapper.Map<AddressUser, AddressUserDto>(address);
+
+            if (!result.Succeeded)
             {
                 return Unauthorized(new ApiResponse(401));
             }
             var role = await _userManager.GetRolesAsync(user);
+
             return new UserDto
             {
                 Email = loginDto.Email,
                 Token = _tokenService.CreateToken(user),
                 DisplayName = user.DisplayName,
-                Role = role.FirstOrDefault()
+                Role = role.FirstOrDefault(),
+                Address = addressDto
             };
         }
 
@@ -116,8 +122,24 @@ namespace API.Controllers
                 Email = registerDto.Email,
                 UserName = registerDto.Email                
             };
-
+            
             var result = await _userManager.CreateAsync(user, registerDto.Password);
+
+            var address = new AddressUser
+            {
+                AppUser = user,
+                AppUserId = user.Id,
+                City = registerDto.City,
+                State = registerDto.State,
+                Street = registerDto.Street,
+                Zipcode = registerDto.Zipcode,
+                FirstName = registerDto.FirstName,
+                LastName = registerDto.LastName
+            };
+
+            var addressDto = _mapper.Map<AddressUser, AddressUserDto>(address);
+            user.AddressUser = address;
+
             await _userManager.AddToRoleAsync(user, "Member");
 
             if (!result.Succeeded) return BadRequest(new ApiResponse(400));
@@ -126,7 +148,9 @@ namespace API.Controllers
             {
                 DisplayName = user.DisplayName,
                 Token = _tokenService.CreateToken(user),
-                Email = user.Email             
+                Email = user.Email ,
+                Role = "Member",
+                Address = addressDto
             };
         }
 

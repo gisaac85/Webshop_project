@@ -24,5 +24,11 @@ namespace API.Extensions
 
             return await input.Users.SingleOrDefaultAsync(x => x.Email == email);
         }
+
+        public static async Task<AddressUser> FindAddressAsync(this UserManager<AppUser> input,string id)
+        {
+            var address = input.Users.Include(x => x.AddressUser).Select(x=>x.AddressUser).SingleOrDefaultAsync(x=>x.AppUserId == id);
+            return await address;
+        }
     }
 }
