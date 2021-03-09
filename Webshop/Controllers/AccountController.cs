@@ -82,13 +82,17 @@ namespace Webshop.Controllers
                     result = JsonConvert.DeserializeObject<UserDto>(apiResponse);
                 }
             }
-            if (result != null)
+            if (result.Token != null)
             {
+                _httpContextAccessor.HttpContext.Session.SetString("JWToken", result.Token);
+                _httpContextAccessor.HttpContext.Session.SetString("User", result.DisplayName);
+                _httpContextAccessor.HttpContext.Session.SetString("Role", result.Role);
                 return RedirectToAction("Index", "Products", null);
             }
             else
             {
-                return View("Index");
+                TempData["registerMsg"] = "Register has failed! Email is Not correct or Email is already exists !";
+                return View("UserRegister");
             }
         }
 
