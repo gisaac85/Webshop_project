@@ -41,6 +41,7 @@ namespace Infrastructure.Identity.SeedData
                         Street = "Deimtstraat 26",
                         City = "Purmerend",
                         State = "Noord Holland",
+                        Country = "Netherlands",
                         Zipcode = "1445GN"
                     }
                 };
@@ -56,6 +57,7 @@ namespace Infrastructure.Identity.SeedData
                         Street = "EuropaLaan 112",
                         City = "Eindhoven",
                         State = "Noord Brabant",
+                        Country = "Netherlands",
                         Zipcode = "1440NN"
                     }
                 };

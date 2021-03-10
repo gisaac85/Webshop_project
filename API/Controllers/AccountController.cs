@@ -130,10 +130,11 @@ namespace API.Controllers
             {
                 AppUser = user,
                 AppUserId = user.Id,
+                Country = registerDto.Country,
                 City = registerDto.City,
                 State = registerDto.State,
                 Street = registerDto.Street,
-                Zipcode = registerDto.Zipcode,
+                Zipcode = registerDto.Zipcode,                
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName
             };

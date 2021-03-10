@@ -6,13 +6,14 @@ namespace Core.Entities.OrderModels
         {
         }
 
-        public Address(string firstName, string lastName, string street, string city, string state, string zipcode)
+        public Address(string firstName, string lastName, string street, string city, string state, string country, string zipcode)
         {
             FirstName = firstName;
             LastName = lastName;
             Street = street;
             City = city;
             State = state;
+            Country = country;
             Zipcode = zipcode;
         }
 
@@ -21,6 +22,7 @@ namespace Core.Entities.OrderModels
         public string Street { get; set; }
         public string City { get; set; }
         public string State { get; set; }
+        public string Country { get; set; }
         public string Zipcode { get; set; }
     }
 }

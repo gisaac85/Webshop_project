@@ -36,6 +36,9 @@ namespace Core.Dtos
         public string State { get; set; }
 
         [Required]
+        public string Country { get; set; }
+
+        [Required]
         public string Zipcode { get; set; }
     }
 }
