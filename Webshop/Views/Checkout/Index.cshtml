@@ -2,7 +2,9 @@
     Layout = "_Layout";
 }
 @using Core.Dtos;
-@model Core.Dtos.OrderToReturnDto;
+@*@using Webshop.Models.ViewModels*@
+@*@model Core.Dtos.OrderToReturnDto;*@
+@model Webshop.Models.ViewModels.OrderVM;
 
 <br />
 
@@ -16,15 +18,15 @@
             <ul class="list-unstyled mb-4">
                 <li class="d-flex justify-content-between py-3 border-bottom">
                     <strong class="text-muted">Order subtotal</strong>
-                    <strong>@String.Format("{0:c2}", Model.Subtotal)</strong>
+                    <strong>@String.Format("{0:c2}", Model.OrderToReturnDTO.Subtotal)</strong>
                 </li>
                 <li class="d-flex justify-content-between py-3 border-bottom">
                     <strong class="text-muted">Shipping and handling</strong>
-                    <strong>@String.Format("{0:c2}", Model.ShippingPrice)</strong>
+                    <strong>@String.Format("{0:c2}", Model.OrderToReturnDTO.ShippingPrice)</strong>
                 </li>
                 <li class="d-flex justify-content-between py-3 border-bottom">
                     <strong class="text-muted">Total</strong>
-                    <strong>@String.Format("{0:c2}", Model.Total)</strong>
+                    <strong>@String.Format("{0:c2}", Model.OrderToReturnDTO.Total)</strong>
                 </li>
             </ul>
         </div>
@@ -33,7 +35,7 @@
         </div>
         <div class="p-4">
             <ul class="list-unstyled mb-4">
-                @foreach (var item in Model.OrderItems)
+                @foreach (var item in Model.OrderToReturnDTO.OrderItems)
                 {
                     <li class="d-flex justify-content-between py-3 border-bottom">
                         <img src="@item.PictureUrl" alt="@item.ProductName"
@@ -56,11 +58,11 @@
         <h4 class="mb-3">Billing address</h4>
         @using (Html.BeginForm("UpdateOrderMVC", "Checkout", FormMethod.Post))
         {
-            <input type="hidden" id="id" name="id" value="@Model.Id" />
+            <input type="hidden" id="id" name="id" value="@Model.OrderToReturnDTO.Id" />
             <div class="row g-3">
                 <div class="col-sm-6">
                     <label for="ShipToAddress_FirstName" class="form-label">First name</label>
-                    <input type="text" class="form-control" name="ShipToAddress_FirstName" id="ShipToAddress_FirstName" placeholder="" value="@Model.ShipToAddress.FirstName" required="" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHklEQVQ4EaVTO26DQBD1ohQWaS2lg9JybZ+AK7hNwx2oIoVf4UPQ0Lj1FdKktevIpel8AKNUkDcWMxpgSaIEaTVv3sx7uztiTdu2s/98DywOw3Dued4Who/M2aIx5lZV1aEsy0+qiwHELyi+Ytl0PQ69SxAxkWIA4RMRTdNsKE59juMcuZd6xIAFeZ6fGCdJ8kY4y7KAuTRNGd7jyEBXsdOPE3a0QGPsniOnnYMO67LgSQN9T41F2QGrQRRFCwyzoIF2qyBuKKbcOgPXdVeY9rMWgNsjf9ccYesJhk3f5dYT1HX9gR0LLQR30TnjkUEcx2uIuS4RnI+aj6sJR0AM8AaumPaM/rRehyWhXqbFAA9kh3/8/NvHxAYGAsZ/il8IalkCLBfNVAAAAABJRU5ErkJggg==&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;">
+                    <input type="text" class="form-control" name="ShipToAddress_FirstName" id="ShipToAddress_FirstName" placeholder="" value="@Model.OrderToReturnDTO.ShipToAddress.FirstName" required="" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHklEQVQ4EaVTO26DQBD1ohQWaS2lg9JybZ+AK7hNwx2oIoVf4UPQ0Lj1FdKktevIpel8AKNUkDcWMxpgSaIEaTVv3sx7uztiTdu2s/98DywOw3Dued4Who/M2aIx5lZV1aEsy0+qiwHELyi+Ytl0PQ69SxAxkWIA4RMRTdNsKE59juMcuZd6xIAFeZ6fGCdJ8kY4y7KAuTRNGd7jyEBXsdOPE3a0QGPsniOnnYMO67LgSQN9T41F2QGrQRRFCwyzoIF2qyBuKKbcOgPXdVeY9rMWgNsjf9ccYesJhk3f5dYT1HX9gR0LLQR30TnjkUEcx2uIuS4RnI+aj6sJR0AM8AaumPaM/rRehyWhXqbFAA9kh3/8/NvHxAYGAsZ/il8IalkCLBfNVAAAAABJRU5ErkJggg==&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;">
                     <div class="invalid-feedback">
                         Valid first name is required.
                     </div>
@@ -68,38 +70,38 @@
 
                 <div class="col-sm-6">
                     <label for="ShipToAddress_LastName" class="form-label">Last name</label>
-                    <input type="text" class="form-control" name="ShipToAddress_LastName" id="ShipToAddress_LastName" placeholder="" value="@Model.ShipToAddress.LastName" required="">
+                    <input type="text" class="form-control" name="ShipToAddress_LastName" id="ShipToAddress_LastName" placeholder="" value="@Model.OrderToReturnDTO.ShipToAddress.LastName" required="">
                     <div class="invalid-feedback">
                         Valid last name is required.
                     </div>
                 </div>             
                   
-               <input type="hidden" class="form-control" id="Email" name="Email" placeholder="you@example.com" value="@Model.BuyerEmail">                   
+               <input type="hidden" class="form-control" id="Email" name="Email" placeholder="you@example.com" value="@Model.OrderToReturnDTO.BuyerEmail">                   
          
                 <div class="col-12">
                     <label for="ShipToAddress_Street" class="form-label">Street</label>
-                    <input type="text" class="form-control" name="ShipToAddress_Street" id="ShipToAddress_Street" placeholder="street & House Number : EuropeLaan 26" value="@Model.ShipToAddress.Street" required="">
+                    <input type="text" class="form-control" name="ShipToAddress_Street" id="ShipToAddress_Street" placeholder="street & House Number : EuropeLaan 26" value="@Model.OrderToReturnDTO.ShipToAddress.Street" required="">
                     <div class="invalid-feedback">
                         Please enter your shipping Street Name.
                     </div>
                 </div>
                 <div class="col-12">
                     <label for="ShipToAddress_City" class="form-label">City</label>
-                    <input type="text" class="form-control" name="ShipToAddress_City" id="ShipToAddress_City" placeholder="City : Amsterdam" value="@Model.ShipToAddress.City" required="">
+                    <input type="text" class="form-control" name="ShipToAddress_City" id="ShipToAddress_City" placeholder="City : Amsterdam" value="@Model.OrderToReturnDTO.ShipToAddress.City" required="">
                     <div class="invalid-feedback">
                         Please enter your shipping City Name.
                     </div>
                 </div>
                 <div class="col-12">
                     <label for="ShipToAddress_State" class="form-label">State</label>
-                    <input type="text" class="form-control" name="ShipToAddress_State" id="ShipToAddress_State" placeholder="State : Noord Holland" value="@Model.ShipToAddress.State" required="">
+                    <input type="text" class="form-control" name="ShipToAddress_State" id="ShipToAddress_State" placeholder="State : Noord Holland" value="@Model.OrderToReturnDTO.ShipToAddress.State" required="">
                     <div class="invalid-feedback">
                         Please enter your shipping State Name.
                     </div>
                 </div>
                 <div class="col-12">
                     <label for="ShipToAddress_Zipcode" class="form-label">Zip Code</label>
-                    <input type="text" class="form-control" name="ShipToAddress_Zipcode" id="ShipToAddress_Zipcode" placeholder="1440 RG" value="@Model.ShipToAddress.Zipcode" required="">
+                    <input type="text" class="form-control" name="ShipToAddress_Zipcode" id="ShipToAddress_Zipcode" placeholder="1440 RG" value="@Model.OrderToReturnDTO.ShipToAddress.Zipcode" required="">
                     <div class="invalid-feedback">
                         Zip code required.
                     </div>
@@ -107,12 +109,12 @@
             </div>
             <br />
             <h4 class="mb-3">Payment</h4>
-            @foreach (var m in ViewBag.methods)
+            @foreach (var method in Model.DeliveryMethods)
             {
                 <div class="my-3">
                     <div class="form-check">
-                        <input id="DeliveryMethodId" name="DeliveryMethodId" type="radio" class="form-check-input" checked="" value="@m.Id" required="">
-                        <label class="form-check-label" for="DeliveryMethodId">@m.ShortName</label>
+                        <input id="DeliveryMethodId" name="DeliveryMethodId" type="radio" class="form-check-input" checked="" value="@method.Id" required="">
+                        <label class="form-check-label" for="DeliveryMethodId">@method.ShortName (shipping cost: @{var cost = method.Price == 0 ? "FREE" : String.Format("{0:c2}", method.Price);} @cost)</label>
                     </div>
                 </div>
             }

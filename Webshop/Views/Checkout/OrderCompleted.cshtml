@@ -1,0 +1,13 @@
+﻿
+@*@model Core.Dtos.OrderToReturnDto;*@
+
+<div class="container">
+    @if (TempData.ContainsKey("OrderNumber"))
+    {
+        <div class="d-flex justify-content-center">
+            <div class="alert alert-success mb-1 mt-3 w-50 text-center" role="alert">
+                Payment the order @TempData["OrderNumber"] succeeded!
+            </div>
+        </div>
+    }
+</div>

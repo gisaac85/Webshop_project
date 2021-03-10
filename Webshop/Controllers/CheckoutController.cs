@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Webshop.Models.ViewModels;
 using Webshop.Shared;
 
 namespace Webshop.Controllers
@@ -82,7 +83,9 @@ namespace Webshop.Controllers
             OrderDto model = new OrderDto();
             AddressUserDto address = new AddressUserDto();
             var createdOrder = new Order();
-            var deliveryMethods = new List<DeliveryMethod>();
+            //var deliveryMethods = new List<DeliveryMethod>();
+
+            OrderVM orderVM = new OrderVM();
 
             using (var httpClient = new HttpClient())
             {
@@ -99,9 +102,9 @@ namespace Webshop.Controllers
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 using (var response = await httpClient.GetAsync("https://localhost:5001/api/orders/deliverymethods"))
                 {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    deliveryMethods = JsonConvert.DeserializeObject<List<DeliveryMethod>>(apiResponse);
-                    ViewData["methods"] = deliveryMethods;
+                    string apiResponse = await response.Content.ReadAsStringAsync();                    
+                    orderVM.DeliveryMethods = JsonConvert.DeserializeObject<List<DeliveryMethod>>(apiResponse);
+                    //ViewData["methods"] = deliveryMethods;
                 }
             }
 
@@ -115,7 +118,9 @@ namespace Webshop.Controllers
             model.ShipToAddress.State = address.State;
             model.ShipToAddress.Street = address.Street;
             model.ShipToAddress.Zipcode = address.Zipcode;
-         
+
+
+
             using (var httpClient = new HttpClient())
             {
                 var myContent = JsonConvert.SerializeObject(model);
@@ -130,19 +135,37 @@ namespace Webshop.Controllers
                     createdOrder = JsonConvert.DeserializeObject<Order>(apiResponse);
                 }
             }
-            var result = _mapper.Map<Order, OrderToReturnDto>(createdOrder);         
+            var result = _mapper.Map<Order, OrderToReturnDto>(createdOrder);
+
+            orderVM.OrderToReturnDTO = new OrderToReturnDto();
+
+            orderVM.OrderToReturnDTO.BuyerEmail = result.BuyerEmail;
+            orderVM.OrderToReturnDTO.DeliveryMethod = result.DeliveryMethod;
+            orderVM.OrderToReturnDTO.Id = result.Id;
+            orderVM.OrderToReturnDTO.OrderDate = result.OrderDate;
+            orderVM.OrderToReturnDTO.OrderItems = result.OrderItems;
+            orderVM.OrderToReturnDTO.ShippingPrice = result.ShippingPrice;
+            orderVM.OrderToReturnDTO.ShipToAddress = result.ShipToAddress;
+            orderVM.OrderToReturnDTO.Status = result.Status;
+            orderVM.OrderToReturnDTO.Subtotal = result.Subtotal;
+            orderVM.OrderToReturnDTO.Total = result.Total;
+
             await PublicMethods();
-            return View("Index", result);
+
+            return View("Index", orderVM);
         }
 
-        public async Task<IActionResult> UpdateOrderMVC(OrderToUpdateDto input)
+        public async Task<IActionResult> UpdateOrderMVC(OrderVM input)
         {          
             var token = _httpContextAccessor.HttpContext.Session.GetString("JWToken");
             var result = new OrderToReturnDto();
+            var newInput = new OrderToReturnDto();
+
+            newInput = input.OrderToReturnDTO;
 
             using (var httpClient = new HttpClient())
             {
-                var myContent = JsonConvert.SerializeObject(input);
+                var myContent = JsonConvert.SerializeObject(newInput);
                 var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/json");
@@ -155,7 +178,11 @@ namespace Webshop.Controllers
                 }
             }
 
-            return View("Index", result);
+            TempData["OrderNumber"] = result.Id;
+
+            await PublicMethods();
+
+            return View("OrderCompleted");
         }
     }
 }
