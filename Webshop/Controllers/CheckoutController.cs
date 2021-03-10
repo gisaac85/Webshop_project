@@ -67,9 +67,9 @@ namespace Webshop.Controllers
             return View("AllOrders",result);
         }
 
+      
         public async Task<IActionResult> CheckoutBasket()
-        {
-
+        {           
             var token = _httpContextAccessor.HttpContext.Session.GetString("JWToken");
             var basketId = _httpContextAccessor.HttpContext.Session.GetString("basketId");
 
@@ -105,6 +105,7 @@ namespace Webshop.Controllers
                 }
             }
 
+
             model.BasketId = basketId;
             model.DeliveryMethodId = 4;
             model.ShipToAddress = new AddressDto();
@@ -114,8 +115,7 @@ namespace Webshop.Controllers
             model.ShipToAddress.State = address.State;
             model.ShipToAddress.Street = address.Street;
             model.ShipToAddress.Zipcode = address.Zipcode;
-
-
+         
             using (var httpClient = new HttpClient())
             {
                 var myContent = JsonConvert.SerializeObject(model);
@@ -130,8 +130,31 @@ namespace Webshop.Controllers
                     createdOrder = JsonConvert.DeserializeObject<Order>(apiResponse);
                 }
             }
-            var result = _mapper.Map<Order, OrderToReturnDto>(createdOrder);            
+            var result = _mapper.Map<Order, OrderToReturnDto>(createdOrder);         
             await PublicMethods();
+            return View("Index", result);
+        }
+
+        public async Task<IActionResult> UpdateOrderMVC(OrderToUpdateDto input)
+        {          
+            var token = _httpContextAccessor.HttpContext.Session.GetString("JWToken");
+            var result = new OrderToReturnDto();
+
+            using (var httpClient = new HttpClient())
+            {
+                var myContent = JsonConvert.SerializeObject(input);
+                var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+                var byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/json");
+
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                using (var response = await httpClient.PostAsync("https://localhost:5001/api/orders/updateOrder", byteContent))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    result = JsonConvert.DeserializeObject<OrderToReturnDto>(apiResponse);
+                }
+            }
+
             return View("Index", result);
         }
     }

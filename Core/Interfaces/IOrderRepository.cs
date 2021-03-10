@@ -15,5 +15,6 @@ namespace Core.Interfaces
         Task<IReadOnlyList<Order>> GetOrdersForUser(string email);
         Task<Order> EditOrder(Order model);
         Task<Order> DeleteOrder(int id);
+        Task<DeliveryMethod> GetDeliveryMethod(int id);
     }
 }

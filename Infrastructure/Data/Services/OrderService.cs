@@ -42,6 +42,12 @@ namespace Infrastructure.Data.Services
             return order;
         }
 
+        public async Task<DeliveryMethod> GetDeliveryMethod(int id)
+        {
+            var model = _orderRepo.GetDeliveryMethod(id);
+            return await model;
+        }
+
         public async Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodsAsync()
         {
             var model = _deliveryRepo.GetDeliveryMethodsAsync();
@@ -57,6 +63,12 @@ namespace Infrastructure.Data.Services
         public async Task<IReadOnlyList<Order>> GetOrdersForUserAsync(string buyerEmail)
         {
             var model = _orderRepo.GetOrdersForUser(buyerEmail);
+            return await model;
+        }
+
+        public async Task<Order> UpdateOrder(Order input)
+        {
+            var model = _orderRepo.EditOrder(input);
             return await model;
         }
     }

@@ -149,11 +149,7 @@ namespace Webshop.Controllers
                 {
                     TempData["msgAccount"] = "Product Not Found";
                     return RedirectToAction("Index", "Products");
-                }
-                else
-                {
-                    TempData["msgAccount"] = $"{product.Name} products found";
-                }
+                }                
             }
             var sharedMethod = new SharedSpace(_httpContextAccessor);
             TempData["types"] = await sharedMethod.FetchProductTypes();
@@ -184,7 +180,7 @@ namespace Webshop.Controllers
                             if (response.IsSuccessStatusCode)
                             {
 
-                                TempData["msgAccount"] = "Product is updated succesfully!";
+                                TempData["msgAccount"] = "Product updated succesfully!";
                             }
                             else
                             {
@@ -222,11 +218,7 @@ namespace Webshop.Controllers
                 {
                     TempData["msgAccount"] = "Product Not Found";
                     return RedirectToAction("Index", "Products");
-                }
-                else
-                {
-                    TempData["msgAccount"] = $"{product.Name} found";
-                }
+                }              
             }
             var sharedMethod = new SharedSpace(_httpContextAccessor);
             TempData["types"] = await sharedMethod.FetchProductTypes();
@@ -254,7 +246,7 @@ namespace Webshop.Controllers
                     {
                         if (response.IsSuccessStatusCode)
                         {
-                            TempData["msgAccount"] = "Product is deleted succesfully!";
+                            TempData["msgAccount"] = "Product deleted succesfully!";
                         }
                         else
                         {

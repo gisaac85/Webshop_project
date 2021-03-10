@@ -3,8 +3,10 @@ using API.Extensions;
 using AutoMapper;
 using Core.Dtos;
 using Core.Entities.OrderModels;
+using Core.Entities.UserModels;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -19,11 +21,13 @@ namespace API.Controllers
     {
         private readonly IOrderService _orderService; 
         private readonly IMapper _mapper;
-
-        public OrdersController(IOrderService orderService,IMapper mapper)
+        private readonly UserManager<AppUser> _userManager;
+        
+        public OrdersController(IOrderService orderService,IMapper mapper, UserManager<AppUser> userManager)
         {
             _orderService = orderService; 
             _mapper = mapper;
+            _userManager = userManager;          
         }
 
         [HttpPost("createOrder")]
@@ -65,5 +69,47 @@ namespace API.Controllers
             return Ok(await _orderService.GetDeliveryMethodsAsync());
         }
 
+        [HttpPost("updateOrder")]
+        public async Task<ActionResult<OrderToReturnDto>> UpdateOrder(OrderToUpdateDto input)
+        {
+            var user = await _userManager.FindByEmailAsync(input.Email);
+            if (user.Email == input.Email)
+            {
+                var order = await _orderService.GetOrderByIdAsync(input.Id, input.Email);
+
+                var address = new Address
+                {
+                    FirstName = input.ShipToAddress_FirstName,
+                    LastName = input.ShipToAddress_LastName,
+                    City = input.ShipToAddress_City,
+                    Street = input.ShipToAddress_Street,
+                    State = input.ShipToAddress_State,
+                    Zipcode = input.ShipToAddress_Zipcode
+                };
+
+                var method = await _orderService.GetDeliveryMethod(input.DeliveryMethodId);
+
+
+                var model = new Order
+                {
+                    BuyerEmail = input.Email,
+                    Id = order.Id,
+                    OrderDate = DateTimeOffset.Now,
+                    ShipToAddress = address,
+                    DeliveryMethod = method,
+                    OrderItems = order.OrderItems,
+                    PaymentIntentId = string.Empty,
+                    Subtotal = order.Subtotal,
+                    Status = OrderStatus.PaymentRecevied
+                };
+                model.GetTotal();
+                var result = await _orderService.UpdateOrder(model);
+                return Ok(_mapper.Map<Order, OrderToReturnDto>(result));
+            }
+            else
+            {
+                return Ok();
+            }
+        }
     }
 }

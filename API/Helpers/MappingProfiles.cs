@@ -25,9 +25,17 @@ namespace API.Helpers
             CreateMap<BasketItemDto, BasketItem>();
             CreateMap<BasketItem, BasketItemDto>();
             CreateMap<AddressDto, Address>();
+
             CreateMap<Order, OrderToReturnDto>()
                .ForMember(d => d.DeliveryMethod, o => o.MapFrom(s => s.DeliveryMethod.ShortName))
                .ForMember(d => d.ShippingPrice, o => o.MapFrom(s => s.DeliveryMethod.Price));
+
+            CreateMap<Order, OrderToUpdateDto>()
+              .ForMember(d => d.DeliveryMethodId, o => o.MapFrom(s => s.DeliveryMethod.Id));
+
+            //CreateMap<OrderToUpdateDto, Order>()
+            // .ForMember(d => d.DeliveryMethod.Id, o => o.MapFrom(s => s.DeliveryMethodId));
+
             CreateMap<OrderDto, Order>(); 
             CreateMap<OrderItem, OrderItemDto>()
                 .ForMember(d => d.ProductId, o => o.MapFrom(s => s.ItemOrdered.ProductItemId))

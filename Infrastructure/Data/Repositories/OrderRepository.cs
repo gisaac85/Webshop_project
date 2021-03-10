@@ -12,10 +12,12 @@ namespace Infrastructure.Data.Repositories
     public class OrderRepository : IOrderRepository
     {
         private readonly WebshopDataContext _context;
+
         public OrderRepository(WebshopDataContext context)
         {
             _context = context;
         }
+
         public async Task<Order> CreateOrder(Order model)
         {
             _context.Orders.Add(model);
@@ -38,9 +40,14 @@ namespace Infrastructure.Data.Repositories
             return model;
         }
 
+        public async Task<DeliveryMethod> GetDeliveryMethod(int id)
+        {
+            return await _context.DeliveryMethods.FindAsync(id);
+        }
+
         public async Task<Order> GetOrder(int id,string email)
         {          
-            return await _context.Orders.Where(x => x.Id == id && x.BuyerEmail == email)
+            return await _context.Orders.AsNoTracking().Where(x => x.Id == id && x.BuyerEmail == email)
                .Include(x => x.DeliveryMethod)              
                .Include(x=>x.ShipToAddress)    
                .Include(x=>x.OrderItems)
@@ -55,12 +62,14 @@ namespace Infrastructure.Data.Repositories
 
         public async Task<IReadOnlyList<Order>> GetOrdersForUser(string email)
         {          
-            return await _context.Orders.Where(x=>x.BuyerEmail == email)
+            return await _context.Orders.Where(x=>x.BuyerEmail == email && x.Status == OrderStatus.PaymentRecevied)
                .Include(x => x.DeliveryMethod)
                .Include(x => x.OrderItems)
                .Include(x => x.ShipToAddress)
                .OrderByDescending(x => x.OrderDate)               
                .ToListAsync();
         }
+
+
     }
 }
