@@ -33,6 +33,17 @@ namespace Webshop.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        public async Task<Tuple<object, object, object, object>> PublicMethods()
+        {
+            var service = new SharedSpace(_httpContextAccessor);
+            TempData["types"] = await service.FetchProductTypes();
+            TempData["brands"] = await service.FetchProducBrands();
+            var basketProducts = await service.FetchBasket();
+            TempData["basketItems"] = basketProducts.Items.Count;
+            TempData["role"] = await service.FetchUserRole();
+            return Tuple.Create(TempData["types"], TempData["brands"], TempData["basketItems"], TempData["role"]);
+        }
+
         public async Task<IActionResult> Index()
         {
             List<ProductToReturnDto> productList = new List<ProductToReturnDto>();
@@ -44,9 +55,9 @@ namespace Webshop.Controllers
                     productList = JsonConvert.DeserializeObject<List<ProductToReturnDto>>(apiResponse);
                 }
             }
-            var sharedMethod = new SharedSpace(_httpContextAccessor);
-            TempData["types"] = await sharedMethod.FetchProductTypes();
-            TempData["brands"] = await sharedMethod.FetchProducBrands();
+            await PublicMethods();
+            CreateProductBrandSelectlist();
+            CreateProductTypeSelectlist();
             return View(productList);
         }
 
@@ -58,10 +69,11 @@ namespace Webshop.Controllers
             TempData["types"] = await sharedMethod.FetchProductTypes();
             TempData["brands"] = await sharedMethod.FetchProducBrands();
 
-            var x = await sharedMethod.FetchProducBrands();
-            TempData["brandlist"] = x.Select(x => x.Name).FirstOrDefault();
+            //var x = await sharedMethod.FetchProducBrands();
+            //TempData["brandlist"] = x.Select(x => x.Name).FirstOrDefault();
+            await PublicMethods();
             CreateProductBrandSelectlist();
-            CreateProductTypeSelectlist();
+            CreateProductTypeSelectlist();           
             return View("AddProduct");
         }
 
@@ -99,11 +111,11 @@ namespace Webshop.Controllers
                                 await posted.CopyToAsync(fileStream);
                             }
 
-                            TempData["msg"] = "Product is added succesfully!";                            
+                            TempData["msgAccount"] = "Product is added succesfully!";                            
                         }
                         else
                         {
-                            TempData["msg"] = "Error!!! Product couldn't be added!";
+                            TempData["msgAccount"] = "Error!!! Product couldn't be added!";
                         }
                         
                     }
@@ -132,23 +144,24 @@ namespace Webshop.Controllers
                         product = JsonConvert.DeserializeObject<ProductToReturnDto>(apiResponse);
                     }
                 }
+              
                 if (product == null)
                 {
-                    TempData["Error"] = "Product Not Found";
+                    TempData["msgAccount"] = "Product Not Found";
                     return RedirectToAction("Index", "Products");
                 }
                 else
                 {
-                    TempData["message"] = $"{product} products found";
+                    TempData["msgAccount"] = $"{product.Name} products found";
                 }
             }
             var sharedMethod = new SharedSpace(_httpContextAccessor);
             TempData["types"] = await sharedMethod.FetchProductTypes();
             TempData["brands"] = await sharedMethod.FetchProducBrands();
 
+            await PublicMethods();
             CreateProductBrandSelectlist();
             CreateProductTypeSelectlist();
-
             return View("EditProduct", product);
         }
 
@@ -171,11 +184,11 @@ namespace Webshop.Controllers
                             if (response.IsSuccessStatusCode)
                             {
 
-                                TempData["msg"] = "Product is updated succesfully!";
+                                TempData["msgAccount"] = "Product is updated succesfully!";
                             }
                             else
                             {
-                                TempData["msg"] = "Error!!! Product couldn't be updated!";
+                                TempData["msgAccount"] = "Error!!! Product couldn't be updated!";
                             }
                         }
 
@@ -207,21 +220,20 @@ namespace Webshop.Controllers
                 }
                 if (product == null)
                 {
-                    TempData["Error"] = "Product Not Found";
+                    TempData["msgAccount"] = "Product Not Found";
                     return RedirectToAction("Index", "Products");
                 }
                 else
                 {
-                    TempData["message"] = $"{product} found";
+                    TempData["msgAccount"] = $"{product.Name} found";
                 }
             }
             var sharedMethod = new SharedSpace(_httpContextAccessor);
             TempData["types"] = await sharedMethod.FetchProductTypes();
             TempData["brands"] = await sharedMethod.FetchProducBrands();
 
-            CreateProductBrandSelectlist();
-            CreateProductTypeSelectlist();
-
+            await PublicMethods();
+           
             return View("DeleteProduct", product);
         }
 
@@ -242,12 +254,11 @@ namespace Webshop.Controllers
                     {
                         if (response.IsSuccessStatusCode)
                         {
-
-                            TempData["msg"] = "Product is deleted succesfully!";
+                            TempData["msgAccount"] = "Product is deleted succesfully!";
                         }
                         else
                         {
-                            TempData["msg"] = "Error!!! Product couldn't be deleted!";
+                            TempData["msgAccount"] = "Error!!! Product couldn't be deleted!";
                         }
                     }
                 }
@@ -261,18 +272,15 @@ namespace Webshop.Controllers
         }
 
         private void CreateProductBrandSelectlist(int selectedBrand = 0)
-        {
-            ViewData["productBrandList"] = new SelectList((List<ProductBrand>)TempData["brands"], nameof(ProductBrand.Id), nameof(ProductBrand.Name), selectedBrand);            
+        {            
+            ViewData["productBrandSList"] = new SelectList((List<ProductBrand>)TempData["brands"], nameof(ProductBrand.Id), nameof(ProductBrand.Name), selectedBrand);            
         }
         private void CreateProductTypeSelectlist(int selectedType = 0)
-        {
-            ViewData["productTypeList"] = new SelectList((List<ProductType>)TempData["types"], nameof(ProductType.Id), nameof(ProductType.Name), selectedType);
+        {           
+            ViewData["productTypeSList"] = new SelectList((List<ProductType>)TempData["types"], nameof(ProductType.Id), nameof(ProductType.Name), selectedType);
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+       
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

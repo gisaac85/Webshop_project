@@ -180,7 +180,7 @@ namespace Webshop.Controllers
 
         public IActionResult Logout()
         {
-            _httpContextAccessor.HttpContext.Session.SetString("JWToken", "");
+            _httpContextAccessor.HttpContext.Session.Remove("JWToken");
            // _httpContextAccessor.HttpContext.Session.Clear();
             return RedirectToAction("Index", "Products", null);
         }
