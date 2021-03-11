@@ -16,5 +16,7 @@ namespace Core.Interfaces
         Task<Order> EditOrder(Order model);
         Task<Order> DeleteOrder(int id);
         Task<DeliveryMethod> GetDeliveryMethod(int id);
+        Task<Order> GetOrderByPaymentIntentId(string id);
+        Task<Order> UpdateOrderById(Order order);
     }
 }

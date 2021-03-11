@@ -1,4 +1,5 @@
-﻿using Core.Dtos;
+﻿using AutoMapper;
+using Core.Dtos;
 using Core.Entities.ProductModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -25,17 +26,19 @@ namespace Webshop.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IWebHostEnvironment _hostEnvironment;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IMapper _mapper;
 
-        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment hostEnvironment, IHttpContextAccessor httpContextAccessor)
+        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment hostEnvironment, IHttpContextAccessor httpContextAccessor,IMapper mapper)
         {
             _logger = logger;
             _hostEnvironment = hostEnvironment;
             _httpContextAccessor = httpContextAccessor;
+            _mapper = mapper;
         }
 
         public async Task<Tuple<object, object, object, object>> PublicMethods()
         {
-            var service = new SharedSpace(_httpContextAccessor);
+            var service = new SharedSpace(_httpContextAccessor,_mapper);
             TempData["types"] = await service.FetchProductTypes();
             TempData["brands"] = await service.FetchProducBrands();
             var basketProducts = await service.FetchBasket();
@@ -65,7 +68,7 @@ namespace Webshop.Controllers
         public async Task<IActionResult> AddProduct()
         {
             
-            var sharedMethod = new SharedSpace(_httpContextAccessor);
+            var sharedMethod = new SharedSpace(_httpContextAccessor,_mapper);
             TempData["types"] = await sharedMethod.FetchProductTypes();
             TempData["brands"] = await sharedMethod.FetchProducBrands();
 
@@ -151,7 +154,7 @@ namespace Webshop.Controllers
                     return RedirectToAction("Index", "Products");
                 }                
             }
-            var sharedMethod = new SharedSpace(_httpContextAccessor);
+            var sharedMethod = new SharedSpace(_httpContextAccessor,_mapper);
             TempData["types"] = await sharedMethod.FetchProductTypes();
             TempData["brands"] = await sharedMethod.FetchProducBrands();
 
@@ -220,7 +223,7 @@ namespace Webshop.Controllers
                     return RedirectToAction("Index", "Products");
                 }              
             }
-            var sharedMethod = new SharedSpace(_httpContextAccessor);
+            var sharedMethod = new SharedSpace(_httpContextAccessor,_mapper);
             TempData["types"] = await sharedMethod.FetchProductTypes();
             TempData["brands"] = await sharedMethod.FetchProducBrands();
 

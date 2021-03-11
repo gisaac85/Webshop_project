@@ -15,5 +15,7 @@ namespace Core.Interfaces
         Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodsAsync();
         Task<Order> UpdateOrder(Order input,string basketId);
         Task<DeliveryMethod> GetDeliveryMethod(int id);
+        Task<Order> GetOrderByPaymentIntentId(string id);
+        Task<Order> UpdateOrderById(Order order);
     }
 }

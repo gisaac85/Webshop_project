@@ -1,4 +1,5 @@
-﻿using Core.Dtos;
+﻿using AutoMapper;
+using Core.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -16,16 +17,16 @@ namespace Webshop.Controllers
     {
       
         private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public AccountController(IHttpContextAccessor httpContextAccessor)
+        private readonly IMapper _mapper;
+        public AccountController(IHttpContextAccessor httpContextAccessor, IMapper mapper)
         {
-            
+            _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Tuple<object, object, object, object>> PublicMethods()
         {
-            var service = new SharedSpace(_httpContextAccessor);
+            var service = new SharedSpace(_httpContextAccessor,_mapper);
             TempData["types"] = await service.FetchProductTypes();
             TempData["brands"] = await service.FetchProducBrands();
             var basketProducts = await service.FetchBasket();

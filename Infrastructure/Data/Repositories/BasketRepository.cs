@@ -22,9 +22,12 @@ namespace Infrastructure.Data.Repositories
 
         public async Task<CustomerBasket> GetBasketAsync(string basketId)
         {
-            var data = await _database.StringGetAsync(basketId);
-
-            return data.IsNullOrEmpty ? null : JsonSerializer.Deserialize<CustomerBasket>(data);
+            var data = await _database.StringGetAsync(basketId);    
+            if(data.IsNullOrEmpty)
+            {
+                return null;
+            }
+           return JsonSerializer.Deserialize<CustomerBasket>(data);
         }
 
         public async Task<CustomerBasket> UpdateBasketAsync(CustomerBasket basket)

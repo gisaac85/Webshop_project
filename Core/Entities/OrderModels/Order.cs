@@ -32,7 +32,7 @@ namespace Core.Entities.OrderModels
         {
             if (DeliveryMethod != null)
             {
-                return Subtotal + DeliveryMethod.Price;
+               return Subtotal + DeliveryMethod.Price;              
             }
             else
             {

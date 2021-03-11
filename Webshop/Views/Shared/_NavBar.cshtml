@@ -1,14 +1,14 @@
-﻿
-<!-- Navbar -->
+﻿<!-- Navbar -->
 @using System.Web;
 @using Microsoft.AspNetCore.Http;
 @inject IHttpContextAccessor httpContextAcc;
 <nav class="navbar navbar-expand navbar-dark bg-dark">
 
     <a class="navbar-brand" asp-controller="Products" asp-action="Index">
-        <img src="~/images/Webshop-logo.png" height="50" alt="mdb logo">
+        <img src="~/images/goahLogo.jpeg" height="50" alt="mdb logo">&nbsp;&nbsp;&nbsp;
+        <span class="nav-item">WebShop</span>
     </a>
-    
+
     <!-- Collapse button -->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav1"
             aria-controls="basicExampleNav1" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,9 +33,6 @@
                 </li>
             }
             <li class="nav-item">
-                <a asp-controller="Products" asp-action="Index" class="nav-link waves-effect">WebShop</a>
-            </li>
-            <li class="nav-item">
                 <a href="#!" class="nav-link waves-effect">Contact</a>
             </li>
             @if (httpContextAcc.HttpContext.Session.GetString("JWToken") != null && httpContextAcc.HttpContext.Session.GetString("JWToken").ToString().Length > 0)
@@ -47,10 +44,13 @@
                     </a>
 
                     <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item nav-link drpdwn-item" asp-controller="Basket" asp-action="Index">
-                            <i class="fas fa-shopping-cart fa-1x mr-3"></i>
-                            View Basket
-                        </a>
+                        @if ( (int)TempData["basketItems"] != 0)
+                        {
+                            <a class="dropdown-item nav-link drpdwn-item" asp-controller="Basket" asp-action="Index">
+                                <i class="fas fa-shopping-cart fa-1x mr-3"></i>
+                                View Basket
+                            </a>
+                        }
                         <a class="dropdown-item nav-link drpdwn-item" asp-controller="Checkout" asp-action="GetAllOrdersForUser">
                             <i class="fas fa-history fa-1x mr-3"></i>
                             View Orders
@@ -87,8 +87,6 @@
 
 </nav>
 <!-- Navbar -->
-
-
 @*@section Styles {
-    <link rel="stylesheet" href="~/css/navbar.css" />
-}*@
+        <link rel="stylesheet" href="~/css/navbar.css" />
+    }*@

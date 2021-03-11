@@ -70,6 +70,21 @@ namespace Infrastructure.Data.Repositories
                .ToListAsync();
         }
 
+        public async Task<Order> GetOrderByPaymentIntentId(string id)
+        {
+            return await _context.Orders.Where(x => x.PaymentIntentId == id)
+               .Include(x => x.DeliveryMethod)
+               .Include(x => x.ShipToAddress)
+               .Include(x => x.OrderItems)
+               .FirstOrDefaultAsync();
+        }
+
+        public async Task<Order> UpdateOrderById(Order order)
+        {
+            _context.Orders.Update(order);
+            await _context.SaveChangesAsync();
+            return order;
+        }
 
     }
 }

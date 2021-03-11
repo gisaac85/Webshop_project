@@ -71,6 +71,12 @@ namespace API.Controllers
             return Ok(await _orderService.GetDeliveryMethodsAsync());
         }
 
+        [HttpGet("deliverymethod/{id}")]
+        public async Task<ActionResult<DeliveryMethod>> GetDeliveryMethodById(int id)
+        {
+            return Ok(await _orderService.GetDeliveryMethod(id));
+        }
+
         [HttpPost("updateOrder")]
         public async Task<ActionResult<OrderToReturnDto>> UpdateOrder(OrderToUpdateDto input)
         {
@@ -90,7 +96,6 @@ namespace API.Controllers
                 };
 
                 var method = await _orderService.GetDeliveryMethod(input.DeliveryMethodId);
-
 
                 var model = new Order
                 {

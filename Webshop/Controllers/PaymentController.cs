@@ -22,7 +22,7 @@ namespace Webshop.Controllers
 
         public async Task<Tuple<object, object, object, object>> PublicMethods()
         {
-            var service = new SharedSpace(_httpContextAccessor);
+            var service = new SharedSpace(_httpContextAccessor,_mapper);
             TempData["types"] = await service.FetchProductTypes();
             TempData["brands"] = await service.FetchProducBrands();
             var basketProducts = await service.FetchBasket();

@@ -14,23 +14,25 @@ namespace API.Controllers
     public class PaymentsController : BaseApiController
     {
         private readonly IPaymentService _paymentService;
-        private readonly string _whSecret;
+        private readonly IDeliveryRepository _deliveryRepo;
+        private readonly string _whSecret = "whsec_K7u4rzPiiRKwvGRkWaKnOpum7UdAKllV";
         private readonly ILogger<IPaymentService> _logger;
-        public PaymentsController(IPaymentService paymentService, ILogger<IPaymentService> logger, IConfiguration config)
+        public PaymentsController(IPaymentService paymentService, IDeliveryRepository deliveryRepo, ILogger<IPaymentService> logger, IConfiguration config)
         {
             _logger = logger;
             _paymentService = paymentService;
+            _deliveryRepo = deliveryRepo;
             _whSecret = config.GetSection("StripeSettings:WhSecret").Value;
         }
 
         [Authorize]
-        [HttpPost("{basketId}")]
-        public async Task<ActionResult<CustomerBasket>> CreateOrUpdatePaymentIntent(string basketId)
+        [HttpPost("{basketId}/{email}")]
+        public async Task<ActionResult<CustomerBasket>> CreateOrUpdatePaymentIntent(string basketId,string email)
         {
-            var basket = await _paymentService.CreateOrUpdatePaymentIntent(basketId);
+            var basket = await _paymentService.CreateOrUpdatePaymentIntent(basketId,email);
 
-            if (basket == null) return BadRequest(new ApiResponse(400, "Problem with your basket"));
-
+            if (basket == null) return BadRequest(new ApiResponse(400, "Problem with your basket"));        
+            
             return basket;
         }
 
@@ -49,7 +51,7 @@ namespace API.Controllers
                 case "payment_intent.succeeded":
                     intent = (PaymentIntent)stripeEvent.Data.Object;
                     _logger.LogInformation("Payment Succeeded: ", intent.Id);
-                    order  = await _paymentService.UpdateOrderPaymentSucceeded(intent.Id);
+                    order = await _paymentService.UpdateOrderPaymentSucceeded(intent.Id);
                     _logger.LogInformation("Order updated to payment received: ", order.Id);
                     break;
                 case "payment_intent.payment_failed":

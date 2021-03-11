@@ -28,7 +28,7 @@ namespace Webshop.Controllers
 
         public async Task<Tuple<object, object, object,object>> PublicMethods()
         {
-            var service = new SharedSpace(_httpContextAccessor);
+            var service = new SharedSpace(_httpContextAccessor,_mapper);
             TempData["types"] = await service.FetchProductTypes();
             TempData["brands"] = await service.FetchProducBrands();
             var basketProducts = await service.FetchBasket();
@@ -45,7 +45,7 @@ namespace Webshop.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var service = new SharedSpace(_httpContextAccessor);
+            var service = new SharedSpace(_httpContextAccessor,_mapper);
             var result = await service.FetchBasket();
             await PublicMethods();           
             return View(result);
@@ -53,14 +53,14 @@ namespace Webshop.Controllers
 
         public async Task<IActionResult> AddToBasket(ProductToReturnDto product)
         {         
-            var service = new SharedSpace(_httpContextAccessor);
+            var service = new SharedSpace(_httpContextAccessor,_mapper);
             await service.AddProductToBasket(product);          
             return RedirectToAction("Index", "Products");
         }
 
         public async Task<IActionResult> RemoveItem(int id)
         {
-            var service = new SharedSpace(_httpContextAccessor);
+            var service = new SharedSpace(_httpContextAccessor,_mapper);
             var result = await service.FetchBasket();
             var item = result.Items.Where(x => x.Id == id).FirstOrDefault();
             result.Items.Remove(item);
@@ -72,7 +72,7 @@ namespace Webshop.Controllers
 
         public async Task<IActionResult> IncrementItemQuantity(int id)
         {
-            var service = new SharedSpace(_httpContextAccessor);
+            var service = new SharedSpace(_httpContextAccessor,_mapper);
             var result = await service.FetchBasket();
             var item = result.Items.FindIndex(x => x.Id == id);
             result.Items[item].Quantity++;
@@ -84,7 +84,7 @@ namespace Webshop.Controllers
 
         public async Task<IActionResult> DecrementItemQuantity(int id)
         {
-            var service = new SharedSpace(_httpContextAccessor);
+            var service = new SharedSpace(_httpContextAccessor,_mapper);
             var result = await service.FetchBasket();
             var item = result.Items.FindIndex(x => x.Id == id);
             if (result.Items[item].Quantity > 1)

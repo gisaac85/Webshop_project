@@ -5,6 +5,7 @@ using Core.Entities;
 using Core.Entities.BasketModels;
 using Core.Entities.OrderModels;
 using Core.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Stripe;
 using Order = Core.Entities.OrderModels.Order;
@@ -20,7 +21,7 @@ namespace Infrastructure.Services
         private readonly IOrderRepository _orderRepo;
         private readonly IConfiguration _config;
 
-        public PaymentService(IBasketRepository basketRepository, IProductRepository productRepo, IDeliveryRepository deliveryRepo,IOrderRepository orderRepo, IConfiguration config)
+        public PaymentService(IBasketRepository basketRepository, IProductRepository productRepo, IDeliveryRepository deliveryRepo, IOrderRepository orderRepo, IConfiguration config)
         {
             _config = config;
             _basketRepository = basketRepository;
@@ -29,7 +30,7 @@ namespace Infrastructure.Services
             _orderRepo = orderRepo;
         }
 
-        public async Task<CustomerBasket> CreateOrUpdatePaymentIntent(string basketId)
+        public async Task<CustomerBasket> CreateOrUpdatePaymentIntent(string basketId,string email)
         {
             StripeConfiguration.ApiKey = _config["StripeSettings:SecretKey"];
 
@@ -38,7 +39,7 @@ namespace Infrastructure.Services
             if (basket == null) return null;
 
             var shippingPrice = 0m;
-
+           
             if (basket.DeliveryMethodId.HasValue)
             {
                 var deliveryMethod = await _deliveryRepo.GetDeliveryMethod((int)basket.DeliveryMethodId);
@@ -57,15 +58,20 @@ namespace Infrastructure.Services
             var service = new PaymentIntentService();
 
             PaymentIntent intent;
-
+            
             if (string.IsNullOrEmpty(basket.PaymentIntentId))
             {
+
                 var options = new PaymentIntentCreateOptions
                 {
                     Amount = (long) basket.Items.Sum(i => i.Quantity * (i.Price * 100)) + (long) shippingPrice * 100,
                     Currency = "eur",
-                    PaymentMethodTypes = new List<string> {"card"}
-                };
+                    PaymentMethodTypes = new List<string> {"card"},
+                    Customer = "cus_J63t1pVjvPzKF8",
+                    PaymentMethod = "pm_card_nl",
+                    Confirm = true,   
+                    ReceiptEmail = email
+                };              
                 intent = await service.CreateAsync(options);
                 basket.PaymentIntentId = intent.Id;
                 basket.ClientSecret = intent.ClientSecret;
@@ -74,37 +80,35 @@ namespace Infrastructure.Services
             {
                 var options = new PaymentIntentUpdateOptions
                 {
-                    Amount = (long) basket.Items.Sum(i => i.Quantity * (i.Price * 100)) + (long) shippingPrice * 100
+                    Amount = (long) basket.Items.Sum(i => i.Quantity * (i.Price * 100)) + (long) shippingPrice * 100,
                 };
                 await service.UpdateAsync(basket.PaymentIntentId, options);
             }
 
-            await _basketRepository.UpdateBasketAsync(basket);
-
+            await _basketRepository.UpdateBasketAsync(basket);           
             return basket;
         }
 
-        public Task<Order> UpdateOrderPaymentFailed(string paymentIntentId)
+        public async Task<Order> UpdateOrderPaymentFailed(string paymentIntentId)
         {
-            throw new System.NotImplementedException();
+            var order = await _orderRepo.GetOrderByPaymentIntentId(paymentIntentId);
+
+            if (order == null) return null;
+
+            order.Status = OrderStatus.PaymentFailed;
+            await _orderRepo.UpdateOrderById(order);
+            return order;
         }
 
-        public Task<Order> UpdateOrderPaymentSucceeded(string paymentIntentId)
-        {
-            throw new System.NotImplementedException();
-        }
+        public async Task<Order> UpdateOrderPaymentSucceeded(string paymentIntentId)
+        {           
+            var order = await _orderRepo.GetOrderByPaymentIntentId(paymentIntentId);
 
+            if (order == null) return null;
 
-        //public async Task<Order> UpdateOrderPaymentSucceeded(string paymentIntentId)
-        //{
-        //    var spec = new OrderByPaymentIntentIdSpecification(paymentIntentId);
-        //    var order = await _orderRepo.get GetEntityWithSpec(spec);
-
-        //    if (order == null) return null;
-
-        //    order.Status = OrderStatus.PaymentRecevied;
-        //    await _orderRepo.EditOrder(order);         
-        //    return order;
-        //}
+            order.Status = OrderStatus.PaymentRecevied;
+            await _orderRepo.UpdateOrderById(order);          
+            return order;
+        }       
     }
 }

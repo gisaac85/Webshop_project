@@ -129,11 +129,14 @@
             </div>
         </div>
         <div class="row">
+            @if (Model.Items.Count != 0)
+            {
             <div class="col-6 offset-6">
                 <a class="btn btn-outline-primary py-2 btn-block" asp-controller="Checkout" asp-action="CheckoutBasket">
                     Proceed to checkout
                 </a>
             </div>
+            }
         </div>
     </div>
 </div>

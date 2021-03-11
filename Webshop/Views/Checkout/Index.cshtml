@@ -114,14 +114,14 @@
                 <div class="my-3">
                     <div class="form-check">
                         <input id="DeliveryMethodId" name="DeliveryMethodId" type="radio" class="form-check-input" checked="" value="@m.Id" required="">
-                        <label class="form-check-label" for="DeliveryMethodId">@m.ShortName</label>
+                        <label class="form-check-label" for="DeliveryMethodId">@m.ShortName - @String.Format("{0:c2}", m.Price) </label>
                     </div>
                 </div>
             }
             <div class="row gy-3">
                 <div class="col-md-6">
                     <label for="cc-name" class="form-label">Name on card</label>
-                    <input type="text" class="form-control" id="cc-name" placeholder="" required="">
+                    <input type="text" class="form-control" id="cc-name" placeholder="" required="" value="Isaac">
                     <small class="text-muted">Full name as displayed on card</small>
                     <div class="invalid-feedback">
                         Name on card is required
@@ -130,7 +130,7 @@
 
                 <div class="col-md-6">
                     <label for="cc-number" class="form-label">Credit card number</label>
-                    <input type="text" class="form-control" id="cc-number" placeholder="" required="">
+                    <input type="text" class="form-control" id="cc-number" placeholder="" required="" value="4000 0052 8000 0002">
                     <div class="invalid-feedback">
                         Credit card number is required
                     </div>
@@ -138,7 +138,7 @@
 
                 <div class="col-md-3">
                     <label for="cc-expiration" class="form-label">Expiration</label>
-                    <input type="text" class="form-control" id="cc-expiration" placeholder="" required="">
+                    <input type="text" class="form-control" id="cc-expiration" placeholder="" required="" value="02 / 25">
                     <div class="invalid-feedback">
                         Expiration date required
                     </div>
@@ -146,7 +146,7 @@
 
                 <div class="col-md-3">
                     <label for="cc-cvv" class="form-label">CVV</label>
-                    <input type="text" class="form-control" id="cc-cvv" placeholder="" required="">
+                    <input type="text" class="form-control" id="cc-cvv" placeholder="" required="" value="323">
                     <div class="invalid-feedback">
                         Security code required
                     </div>

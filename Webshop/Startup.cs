@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Webshop.Shared;
 
 namespace Webshop
 {
@@ -27,7 +28,9 @@ namespace Webshop
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {           
+        {
+            //Stripe.StripeConfiguration.ApiKey = Configuration.GetSection("StripeSettings")["SecretKey"];
+            //services.Configure<StripeSetting>(Configuration.GetSection("StripeSettings"));
             services.AddAutoMapper(typeof(MappingProfiles));           
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();

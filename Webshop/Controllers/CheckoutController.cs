@@ -21,18 +21,17 @@ namespace Webshop.Controllers
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IMapper _mapper;
-
+      
         public CheckoutController(IHttpContextAccessor httpContextAccessor, IMapper mapper)
         {
             _httpContextAccessor = httpContextAccessor;
             _mapper = mapper;
         }
 
-
-
         public async Task<Tuple<object, object, object, object>> PublicMethods()
-        {
-            var service = new SharedSpace(_httpContextAccessor);
+        {           
+           
+            var service = new SharedSpace(_httpContextAccessor,_mapper);
             TempData["types"] = await service.FetchProductTypes();
             TempData["brands"] = await service.FetchProducBrands();
             var basketProducts = await service.FetchBasket();
@@ -89,7 +88,6 @@ namespace Webshop.Controllers
             Address address = new Address();
             var deliveryMethods = new List<DeliveryMethod>();
             var myModel = new Basket_Order_vm();
-
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -99,7 +97,6 @@ namespace Webshop.Controllers
                     address = JsonConvert.DeserializeObject<Address>(apiResponse);
                 }
             }
-
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -111,7 +108,7 @@ namespace Webshop.Controllers
                 }
             }
 
-            var service = new SharedSpace(_httpContextAccessor);
+            var service = new SharedSpace(_httpContextAccessor,_mapper);
             var myBasket = await service.FetchBasket();
 
             myModel.customerBasketDto = _mapper.Map<CustomerBasket, CustomerBasketDto>(myBasket);
@@ -141,33 +138,18 @@ namespace Webshop.Controllers
         [ResponseCache(Location = ResponseCacheLocation.None, Duration = 0, VaryByHeader = "None", NoStore = true)]
         public async Task<IActionResult> CreateOrderMVC(OrderDto input)
         {
-            var token = _httpContextAccessor.HttpContext.Session.GetString("JWToken");
-            var result = new Order();
-
-            using (var httpClient = new HttpClient())
-            {
-                var myContent = JsonConvert.SerializeObject(input);
-                var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
-                var byteContent = new ByteArrayContent(buffer);
-                byteContent.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/json");
-
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                using (var response = await httpClient.PostAsync("https://localhost:5001/api/orders/createOrder", byteContent))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    result = JsonConvert.DeserializeObject<Order>(apiResponse);
-                }
-            }
-
-            var model = _mapper.Map<Order, OrderToReturnDto>(result);
+            _httpContextAccessor.HttpContext.Session.SetString("deliveryId",input.DeliveryMethodId.ToString());
+            var service = new SharedSpace(_httpContextAccessor,_mapper);
+            var createdModel = await service.CreateOrderMVC(input);
+            var model = _mapper.Map<Order, OrderToReturnDto>(createdModel);         
+            model.Total = createdModel.GetTotal();
             await PublicMethods();
-            if (model.Id == 0)
+            if (createdModel.Id == 0)
             {
                 return Redirect("https://localhost:44325/");
             }
            
-            return View("Payment", model);           
-
+            return View("Payment", model);          
         }
     }
 }
