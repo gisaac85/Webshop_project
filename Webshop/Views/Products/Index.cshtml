@@ -66,7 +66,7 @@
                                 </div>
                                 <div class="overlay">
                                     <h2>@item.Name</h2>
-                                    <a asp- onclick="passUrl(`@item.PictureUrl`)" class="info" href="#editModal" data-toggle="modal">INFO</a>
+                                    <a onclick="passUrl(`@item.PictureUrl`)" class="info" href="#editModal" data-toggle="modal">INFO</a>
 
                                     @using (Html.BeginForm("AddToBasket", "Basket", FormMethod.Post, new { @class = "info" }))
                                     {

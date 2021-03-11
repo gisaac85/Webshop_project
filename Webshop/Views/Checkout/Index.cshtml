@@ -18,16 +18,17 @@
             <ul class="list-unstyled mb-4">
                 <li class="d-flex justify-content-between py-3 border-bottom">
                     <strong class="text-muted">Order subtotal</strong>
-                    <strong>@String.Format("{0:c2}", Model.OrderToReturnDto.Subtotal)</strong>
+                    <strong id="total"> @Model.OrderToReturnDto.Subtotal</strong>Eur
                 </li>
-                @*<li class="d-flex justify-content-between py-3 border-bottom">                  
+
+                <li class="d-flex justify-content-between py-3 border-bottom">
                     <strong class="text-muted">Shipping and handling</strong>
-                    <strong>@String.Format("{0:c2}", Model.customerBasketDto.ShippingPrice)</strong>
+                    <strong id="method">@Model.customerBasketDto.ShippingPrice</strong>Eur
                 </li>
                 <li class="d-flex justify-content-between py-3 border-bottom">
                     <strong class="text-muted">Total</strong>
-                    <strong>@String.Format("{0:c2}", Model.OrderToReturnDto.Total)</strong>
-                </li>*@
+                    <strong id="sumTotal">@Model.OrderToReturnDto.Total</strong>Eur
+                </li>
             </ul>
         </div>
         <div class="bg-light px-4 text-uppercase font-weight-bold" style="padding: 1.20em;">
@@ -113,7 +114,7 @@
             {
                 <div class="my-3">
                     <div class="form-check">
-                        <input id="DeliveryMethodId" name="DeliveryMethodId" type="radio" class="form-check-input" checked="" value="@m.Id" required="">
+                        <input onclick="radioClick(@m.Price)" id="DeliveryMethodId" name="DeliveryMethodId" type="radio" class="form-check-input" checked="" value="@m.Id" required="">
                         <label class="form-check-label" for="DeliveryMethodId">@m.ShortName - @String.Format("{0:c2}", m.Price) </label>
                     </div>
                 </div>
@@ -163,3 +164,6 @@
 
 
 
+@section Scripts {
+    <script src="~/js/modal.js" asp-append-version="true"></script>
+}
