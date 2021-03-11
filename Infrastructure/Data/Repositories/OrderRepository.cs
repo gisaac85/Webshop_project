@@ -62,7 +62,7 @@ namespace Infrastructure.Data.Repositories
 
         public async Task<IReadOnlyList<Order>> GetOrdersForUser(string email)
         {          
-            return await _context.Orders.Where(x=>x.BuyerEmail == email && x.Status == OrderStatus.PaymentRecevied)
+            return await _context.Orders.Where(x=>x.BuyerEmail == email )
                .Include(x => x.DeliveryMethod)
                .Include(x => x.OrderItems)
                .Include(x => x.ShipToAddress)

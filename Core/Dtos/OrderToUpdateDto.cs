@@ -9,6 +9,7 @@ namespace Core.Dtos
     public class OrderToUpdateDto
     {
         public int Id { get; set; }
+        public string basketId { get; set; }
         public string Email { get; set; }      
         public string ShipToAddress_FirstName { get; set; }
         public string ShipToAddress_LastName { get; set; }

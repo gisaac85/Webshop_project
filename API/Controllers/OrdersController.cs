@@ -1,5 +1,6 @@
 ﻿using API.Errors;
 using API.Extensions;
+using API.Helpers;
 using AutoMapper;
 using Core.Dtos;
 using Core.Entities.OrderModels;
@@ -16,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    [Authorize]
+    [Authorize]  
     public class OrdersController : BaseApiController
     {
         private readonly IOrderService _orderService; 
@@ -31,6 +32,7 @@ namespace API.Controllers
         }
 
         [HttpPost("createOrder")]
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<ActionResult<Order>> CreateOrder(OrderDto orderDto)
         {
             var email = HttpContext.User.RetrieveEmailFromPrinicipal();
@@ -103,7 +105,7 @@ namespace API.Controllers
                     Status = OrderStatus.PaymentRecevied
                 };
                 model.GetTotal();
-                var result = await _orderService.UpdateOrder(model);
+                var result = await _orderService.UpdateOrder(model, input.basketId);
                 return Ok(_mapper.Map<Order, OrderToReturnDto>(result));
             }
             else

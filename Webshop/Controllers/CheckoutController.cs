@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Core.Dtos;
+using Core.Entities.BasketModels;
 using Core.Entities.OrderModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,6 +12,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Webshop.Models.ViewModels;
 using Webshop.Shared;
 
 namespace Webshop.Controllers
@@ -24,6 +27,8 @@ namespace Webshop.Controllers
             _httpContextAccessor = httpContextAccessor;
             _mapper = mapper;
         }
+
+
 
         public async Task<Tuple<object, object, object, object>> PublicMethods()
         {
@@ -60,18 +65,20 @@ namespace Webshop.Controllers
                 using (var response = await httpClient.GetAsync("https://localhost:5001/api/orders/getorders"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    result = JsonConvert.DeserializeObject<List<OrderToReturnDto>>(apiResponse);                   
+                    result = JsonConvert.DeserializeObject<List<OrderToReturnDto>>(apiResponse);
                 }
             }
             await PublicMethods();
-            return View("AllOrders",result);
+            return View("AllOrders", result);
         }
 
-      
+
+        [ResponseCache(Location = ResponseCacheLocation.None, Duration = 0, VaryByHeader = "None", NoStore = true)]
         public async Task<IActionResult> CheckoutBasket()
-        {           
+        {
             var token = _httpContextAccessor.HttpContext.Session.GetString("JWToken");
             var basketId = _httpContextAccessor.HttpContext.Session.GetString("basketId");
+            var email = _httpContextAccessor.HttpContext.Session.GetString("Email");
 
             if (token == null || token == "")
             {
@@ -79,10 +86,9 @@ namespace Webshop.Controllers
                 return RedirectToAction("Index", "Account");
             }
 
-            OrderDto model = new OrderDto();
-            AddressUserDto address = new AddressUserDto();
-            var createdOrder = new Order();
+            Address address = new Address();
             var deliveryMethods = new List<DeliveryMethod>();
+            var myModel = new Basket_Order_vm();
 
             using (var httpClient = new HttpClient())
             {
@@ -90,7 +96,7 @@ namespace Webshop.Controllers
                 using (var response = await httpClient.GetAsync("https://localhost:5001/api/account/address"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    address = JsonConvert.DeserializeObject<AddressUserDto>(apiResponse);
+                    address = JsonConvert.DeserializeObject<Address>(apiResponse);
                 }
             }
 
@@ -105,40 +111,38 @@ namespace Webshop.Controllers
                 }
             }
 
+            var service = new SharedSpace(_httpContextAccessor);
+            var myBasket = await service.FetchBasket();
 
-            model.BasketId = basketId;
-            model.DeliveryMethodId = 4;
-            model.ShipToAddress = new AddressDto();
-            model.ShipToAddress.City = address.City;
-            model.ShipToAddress.FirstName = address.FirstName;
-            model.ShipToAddress.LastName = address.LastName;
-            model.ShipToAddress.State = address.State;
-            model.ShipToAddress.Street = address.Street;
-            model.ShipToAddress.Zipcode = address.Zipcode;
-         
-            using (var httpClient = new HttpClient())
+            myModel.customerBasketDto = _mapper.Map<CustomerBasket, CustomerBasketDto>(myBasket);
+            myModel.OrderToReturnDto.ShipToAddress = new Address(address.FirstName, address.LastName, address.Street, address.City, address.State, address.Zipcode);
+            myModel.OrderToReturnDto.DeliveryMethod = myBasket.DeliveryMethodId.ToString();
+            myModel.OrderToReturnDto.OrderDate = DateTimeOffset.Now;
+            myModel.OrderToReturnDto.Status = OrderStatus.Pending.ToString();
+            myModel.OrderToReturnDto.BuyerEmail = email;
+
+            decimal subTotal = 0;
+
+            foreach (var item in myBasket.Items)
             {
-                var myContent = JsonConvert.SerializeObject(model);
-                var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
-                var byteContent = new ByteArrayContent(buffer);
-                byteContent.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/json");
-
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                using (var response = await httpClient.PostAsync("https://localhost:5001/api/orders/createOrder", byteContent))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    createdOrder = JsonConvert.DeserializeObject<Order>(apiResponse);
-                }
+                subTotal += item.Price * item.Quantity;
             }
-            var result = _mapper.Map<Order, OrderToReturnDto>(createdOrder);         
+            myModel.OrderToReturnDto.Subtotal = subTotal;
+            myModel.OrderToReturnDto.ShippingPrice = 0;
+            myModel.OrderToReturnDto.Total = subTotal + myModel.OrderToReturnDto.ShippingPrice;
+
             await PublicMethods();
-            return View("Index", result);
+            return View("Index", myModel);
         }
 
-        public async Task<IActionResult> UpdateOrderMVC(OrderToUpdateDto input)
-        {          
+
+        [HttpPost]       
+        [ValidateAntiForgeryToken]
+        [ResponseCache(Location = ResponseCacheLocation.None, Duration = 0, VaryByHeader = "None", NoStore = true)]
+        public async Task<IActionResult> CreateOrderMVC(OrderDto input)
+        {
             var token = _httpContextAccessor.HttpContext.Session.GetString("JWToken");
-            var result = new OrderToReturnDto();
+            var result = new Order();
 
             using (var httpClient = new HttpClient())
             {
@@ -148,14 +152,22 @@ namespace Webshop.Controllers
                 byteContent.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/json");
 
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                using (var response = await httpClient.PostAsync("https://localhost:5001/api/orders/updateOrder", byteContent))
+                using (var response = await httpClient.PostAsync("https://localhost:5001/api/orders/createOrder", byteContent))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    result = JsonConvert.DeserializeObject<OrderToReturnDto>(apiResponse);
+                    result = JsonConvert.DeserializeObject<Order>(apiResponse);
                 }
             }
 
-            return View("Index", result);
+            var model = _mapper.Map<Order, OrderToReturnDto>(result);
+            await PublicMethods();
+            if (model.Id == 0)
+            {
+                return Redirect("https://localhost:44325/");
+            }
+           
+            return View("Payment", model);           
+
         }
     }
 }

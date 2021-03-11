@@ -66,9 +66,11 @@ namespace Infrastructure.Data.Services
             return await model;
         }
 
-        public async Task<Order> UpdateOrder(Order input)
+        public async Task<Order> UpdateOrder(Order input,string basketId)
         {
+            var basket = await _basketRepo.GetBasketAsync(basketId);
             var model = _orderRepo.EditOrder(input);
+            await _basketRepo.DeleteBasketAsync(basketId);
             return await model;
         }
     }
