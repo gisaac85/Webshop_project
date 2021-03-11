@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -60,18 +61,18 @@ namespace Infrastructure.Services
             PaymentIntent intent;
             
             if (string.IsNullOrEmpty(basket.PaymentIntentId))
-            {
-
+            {                
                 var options = new PaymentIntentCreateOptions
                 {
-                    Amount = (long) basket.Items.Sum(i => i.Quantity * (i.Price * 100)) + (long) shippingPrice * 100,
+                    Amount = (long)basket.Items.Sum(i => i.Quantity * (i.Price * 100)) + (long)shippingPrice * 100,
                     Currency = "eur",
-                    PaymentMethodTypes = new List<string> {"card"},
-                    Customer = "cus_J63t1pVjvPzKF8",
+                    PaymentMethodTypes = new List<string> { "card" },
+                    Customer = "cus_J63t1pVjvPzKF8",                
                     PaymentMethod = "pm_card_nl",
                     Confirm = true,   
-                    ReceiptEmail = email
-                };              
+                    ReceiptEmail = email,                    
+                }; 
+                
                 intent = await service.CreateAsync(options);
                 basket.PaymentIntentId = intent.Id;
                 basket.ClientSecret = intent.ClientSecret;

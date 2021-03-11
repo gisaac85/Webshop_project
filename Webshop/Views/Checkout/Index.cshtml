@@ -20,14 +20,14 @@
                     <strong class="text-muted">Order subtotal</strong>
                     <strong>@String.Format("{0:c2}", Model.OrderToReturnDto.Subtotal)</strong>
                 </li>
-                <li class="d-flex justify-content-between py-3 border-bottom">
+                @*<li class="d-flex justify-content-between py-3 border-bottom">                  
                     <strong class="text-muted">Shipping and handling</strong>
                     <strong>@String.Format("{0:c2}", Model.customerBasketDto.ShippingPrice)</strong>
                 </li>
                 <li class="d-flex justify-content-between py-3 border-bottom">
                     <strong class="text-muted">Total</strong>
                     <strong>@String.Format("{0:c2}", Model.OrderToReturnDto.Total)</strong>
-                </li>
+                </li>*@
             </ul>
         </div>
         <div class="bg-light px-4 text-uppercase font-weight-bold" style="padding: 1.20em;">
@@ -159,5 +159,7 @@
         }
     </div>
 </div>
+
+
 
 

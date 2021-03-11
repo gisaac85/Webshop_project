@@ -20,7 +20,7 @@
                 <td>@Model.OrderDate</td>
                 <td>@String.Format("{0:c2}", Model.Subtotal)</td>
                 <td>@Model.DeliveryMethod</td>
-                <td>@Model.ShippingPrice</td>
+                <td>@String.Format("{0:c2}", Model.ShippingPrice)</td>
                 @foreach (var prod in Model.OrderItems)
                 {
                     <td class="d-flex justify-content-between py-3">
