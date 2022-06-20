@@ -38,10 +38,10 @@ namespace Infrastructure.Identity.SeedData
                     {
                         FirstName = "Gaorieh",
                         LastName = "Isaac",
-                        Street = "Deimtstraat 26",
+                        Street = "Gorslaan 60",
                         City = "Purmerend",
                         State = "Noord Holland",
-                        Zipcode = "1445GN"
+                        Zipcode = "1441RG"
                     }
                 };
                 var user1 = new AppUser
